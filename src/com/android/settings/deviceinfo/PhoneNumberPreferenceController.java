@@ -1,0 +1,262 @@
+/*
+ * Copyright (C) 2017 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.android.settings.deviceinfo;
+
+import android.content.Context;
+// QTI_BEGIN: 2021-09-22: Android_UI: Settings: Update phone numbers when IMS registered.
+import android.os.Handler;
+import android.os.Looper;
+// QTI_END: 2021-09-22: Android_UI: Settings: Update phone numbers when IMS registered.
+import android.os.UserManager;
+import android.telephony.SubscriptionInfo;
+import android.telephony.SubscriptionManager;
+import android.telephony.TelephonyManager;
+// QTI_BEGIN: 2021-09-22: Android_UI: Settings: Update phone numbers when IMS registered.
+import android.telephony.ims.ImsMmTelManager;
+// QTI_END: 2021-09-22: Android_UI: Settings: Update phone numbers when IMS registered.
+import android.text.TextUtils;
+// QTI_BEGIN: 2021-09-22: Android_UI: Settings: Update phone numbers when IMS registered.
+import android.util.Log;
+// QTI_END: 2021-09-22: Android_UI: Settings: Update phone numbers when IMS registered.
+
+import androidx.annotation.VisibleForTesting;
+// QTI_BEGIN: 2021-09-22: Android_UI: Settings: Update phone numbers when IMS registered.
+import androidx.lifecycle.Lifecycle;
+import androidx.lifecycle.LifecycleObserver;
+import androidx.lifecycle.OnLifecycleEvent;
+// QTI_END: 2021-09-22: Android_UI: Settings: Update phone numbers when IMS registered.
+import androidx.preference.Preference;
+import androidx.preference.PreferenceCategory;
+import androidx.preference.PreferenceScreen;
+
+import com.android.settings.R;
+import com.android.settings.Utils;
+import com.android.settings.core.BasePreferenceController;
+import com.android.settings.network.SubscriptionUtil;
+
+import java.util.ArrayList;
+// QTI_BEGIN: 2021-09-22: Android_UI: Settings: Update phone numbers when IMS registered.
+import java.util.HashMap;
+// QTI_END: 2021-09-22: Android_UI: Settings: Update phone numbers when IMS registered.
+import java.util.List;
+
+// QTI_BEGIN: 2021-09-22: Android_UI: Settings: Update phone numbers when IMS registered.
+import static android.content.Context.CLIPBOARD_SERVICE;
+import static androidx.lifecycle.Lifecycle.Event;
+
+public class PhoneNumberPreferenceController extends BasePreferenceController
+        implements LifecycleObserver {
+    private static final String TAG = PhoneNumberPreferenceController.class.getSimpleName();
+    // This delay is used to make sure telephony framework has enough time to parse
+    // the phone number from the IMS registration indication message.
+    private static final long DELAY_MILLIS = 500L;
+// QTI_END: 2021-09-22: Android_UI: Settings: Update phone numbers when IMS registered.
+
+    private static final String KEY_PHONE_NUMBER = "phone_number";
+    private static final String KEY_PREFERENCE_CATEGORY = "basic_info_category";
+
+    private final TelephonyManager mTelephonyManager;
+    private final SubscriptionManager mSubscriptionManager;
+    private final List<Preference> mPreferenceList = new ArrayList<>();
+// QTI_BEGIN: 2021-09-22: Android_UI: Settings: Update phone numbers when IMS registered.
+    private HashMap<Integer, ImsConnector> mImsConnectorMap = new HashMap<>();
+    private int mPhoneCount;
+    private Handler mHandler;
+
+    private final ImsMmTelManager.RegistrationCallback mImsRegistrationCallback =
+            new ImsMmTelManager.RegistrationCallback() {
+                @Override
+                public void onRegistered(int imsTransportType) {
+                    Log.d(TAG, "onRegistered: imsTransportType=" + imsTransportType);
+                    if (mHandler.hasMessagesOrCallbacks()) {
+                        Log.d(TAG, "onRegistered: optimize to remove unhandled runnables");
+                        mHandler.removeCallbacksAndMessages(null);
+                    }
+                    mHandler.postDelayed(() -> updateState(null), DELAY_MILLIS);
+                }
+            };
+// QTI_END: 2021-09-22: Android_UI: Settings: Update phone numbers when IMS registered.
+
+    public PhoneNumberPreferenceController(Context context, String key) {
+        super(context, key);
+        mTelephonyManager = mContext.getSystemService(TelephonyManager.class);
+        mSubscriptionManager = mContext.getSystemService(SubscriptionManager.class);
+// QTI_BEGIN: 2021-09-22: Android_UI: Settings: Update phone numbers when IMS registered.
+        mPhoneCount = mTelephonyManager.getPhoneCount();
+        mHandler = new Handler(Looper.getMainLooper());
+        initImsConnectors();
+// QTI_END: 2021-09-22: Android_UI: Settings: Update phone numbers when IMS registered.
+    }
+
+    @Override
+    public int getAvailabilityStatus() {
+        if (!Utils.isMobileDataCapable(mContext) && !Utils.isVoiceCapable(mContext)) {
+            return UNSUPPORTED_ON_DEVICE;
+        }
+        if (!mContext.getSystemService(UserManager.class).isAdminUser()) {
+            return DISABLED_FOR_USER;
+        }
+        return AVAILABLE;
+    }
+
+    @Override
+    public void displayPreference(PreferenceScreen screen) {
+        super.displayPreference(screen);
+        if (!isAvailable()) {
+            return;
+        }
+
+        final Preference preference = screen.findPreference(getPreferenceKey());
+        final PreferenceCategory category = screen.findPreference(KEY_PREFERENCE_CATEGORY);
+        mPreferenceList.add(preference);
+
+        final int phonePreferenceOrder = preference.getOrder();
+        // Add additional preferences for each sim in the device
+        for (int simSlotNumber = 1; simSlotNumber < mTelephonyManager.getPhoneCount();
+                simSlotNumber++) {
+            final Preference multiSimPreference = createNewPreference(screen.getContext());
+            multiSimPreference.setCopyingEnabled(true);
+            multiSimPreference.setOrder(phonePreferenceOrder + simSlotNumber);
+            multiSimPreference.setKey(KEY_PHONE_NUMBER + simSlotNumber);
+            category.addPreference(multiSimPreference);
+            mPreferenceList.add(multiSimPreference);
+        }
+    }
+
+    @Override
+    public void updateState(Preference preference) {
+        for (int simSlotNumber = 0; simSlotNumber < mPreferenceList.size(); simSlotNumber++) {
+            final Preference simStatusPreference = mPreferenceList.get(simSlotNumber);
+            simStatusPreference.setTitle(getPreferenceTitle(simSlotNumber));
+            setPhoneNumber(simSlotNumber);
+        }
+    }
+
+    @Override
+    public boolean useDynamicSliceSummary() {
+        return true;
+    }
+
+    private void setPhoneNumber(int simSlot) {
+        final Preference simStatusPreference = mPreferenceList.get(simSlot);
+        final SubscriptionInfo subscriptionInfo = getSubscriptionInfo(simSlot);
+        simStatusPreference.setEnabled(subscriptionInfo != null);
+        if (subscriptionInfo == null) {
+            simStatusPreference.setSummary(mContext.getString(R.string.device_info_not_available));
+        } else {
+            simStatusPreference.setSummary(getFormattedPhoneNumber(subscriptionInfo));
+        }
+    }
+
+    private CharSequence getPreferenceTitle(int simSlot) {
+        return mTelephonyManager.getPhoneCount() > 1 ? mContext.getString(
+                R.string.status_number_sim_slot, simSlot + 1) : mContext.getString(
+                R.string.status_number);
+    }
+
+    @VisibleForTesting
+    protected SubscriptionInfo getSubscriptionInfo(int simSlot) {
+        final List<SubscriptionInfo> subscriptionInfoList =
+                mSubscriptionManager.getActiveSubscriptionInfoList();
+        if (subscriptionInfoList != null) {
+            for (SubscriptionInfo info : subscriptionInfoList) {
+                if (info.getSimSlotIndex() == simSlot) {
+                    return info;
+                }
+            }
+        }
+        return null;
+    }
+
+    @VisibleForTesting
+    protected String getFormattedPhoneNumber(SubscriptionInfo subscriptionInfo) {
+        final String phoneNumber = SubscriptionUtil.getBidiFormattedPhoneNumber(mContext,
+                subscriptionInfo);
+        return TextUtils.isEmpty(phoneNumber) ? mContext.getString(R.string.device_info_default)
+                : phoneNumber;
+    }
+
+    @VisibleForTesting
+    protected Preference createNewPreference(Context context) {
+        return new Preference(context);
+    }
+// QTI_BEGIN: 2021-09-22: Android_UI: Settings: Update phone numbers when IMS registered.
+
+    public void init(Lifecycle lifecycle) {
+        if (null != lifecycle) {
+            lifecycle.addObserver(this);
+        } else {
+            Log.e(TAG, "init: lifecycle is null, invalid param");
+        }
+    }
+
+    @OnLifecycleEvent(Event.ON_RESUME)
+    public void onResume() {
+        connect();
+    }
+
+    @OnLifecycleEvent(Event.ON_PAUSE)
+    public void onPause() {
+        disconnect();
+        mHandler.removeCallbacksAndMessages(null);
+    }
+
+    private void initImsConnectors() {
+        for (int slotId = 0; slotId < mPhoneCount; slotId++) {
+            ImsConnector imsConnector = new ImsConnector(mContext, slotId,
+                    mImsRegistrationCallback);
+            mImsConnectorMap.put(Integer.valueOf(slotId), imsConnector);
+        }
+    }
+
+    private void connect() {
+        if (mImsConnectorMap.isEmpty()) {
+            Log.e(TAG, "connect: need init ims connectors");
+            return;
+        }
+
+        int size = mImsConnectorMap.size();
+        for (int index = 0; index < size; index++) {
+            ImsConnector connector = mImsConnectorMap.get(Integer.valueOf(index));
+            if (null != connector) {
+                connector.connect();
+            }
+        }
+    }
+
+    private void disconnect() {
+        if (mImsConnectorMap.isEmpty()) {
+            Log.d(TAG, "disconnect: need do nothing");
+            return;
+        }
+
+        int size = mImsConnectorMap.size();
+        for (int index = 0; index < size; index++) {
+            ImsConnector connector = mImsConnectorMap.get(Integer.valueOf(index));
+            if (null != connector) {
+                connector.disconnect();
+            }
+        }
+    }
+
+    @Override
+    protected void finalize() throws Throwable {
+        mImsConnectorMap.clear();
+        super.finalize();
+    }
+// QTI_END: 2021-09-22: Android_UI: Settings: Update phone numbers when IMS registered.
+}

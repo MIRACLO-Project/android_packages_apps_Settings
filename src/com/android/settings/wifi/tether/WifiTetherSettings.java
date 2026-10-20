@@ -1,0 +1,598 @@
+/*
+ * Copyright (C) 2017 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.android.settings.wifi.tether;
+
+import static android.net.wifi.WifiManager.WIFI_AP_STATE_CHANGED_ACTION;
+import static android.view.View.INVISIBLE;
+import static android.view.View.VISIBLE;
+// QTI_BEGIN: 2021-07-13: WLAN: Softap: Add support for Dual Band (2G+5G) configuration from UI
+import static com.android.settings.wifi.tether.WifiTetherApBandPreferenceController.BAND_BOTH_2G_5G;
+// QTI_END: 2021-07-13: WLAN: Softap: Add support for Dual Band (2G+5G) configuration from UI
+
+import static com.android.settings.wifi.WifiUtils.canShowWifiHotspot;
+
+import android.app.settings.SettingsEnums;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.wifi.SoftApConfiguration;
+import android.net.wifi.WifiManager;
+import android.os.Bundle;
+import android.os.UserManager;
+import android.util.FeatureFlagUtils;
+import android.util.Log;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.VisibleForTesting;
+import androidx.preference.Preference;
+
+import com.android.settings.R;
+import com.android.settings.SettingsActivity;
+import com.android.settings.core.FeatureFlags;
+import com.android.settings.dashboard.RestrictedDashboardFragment;
+import com.android.settings.overlay.FeatureFactory;
+import com.android.settings.search.BaseSearchIndexProvider;
+import com.android.settings.widget.SettingsMainSwitchBar;
+import com.android.settings.wifi.WifiUtils;
+import com.android.settings.wifi.repository.SharedConnectivityRepository;
+import com.android.settingslib.TetherUtil;
+import com.android.settingslib.core.AbstractPreferenceController;
+import com.android.settingslib.search.SearchIndexable;
+import com.android.settingslib.wifi.WifiEnterpriseRestrictionUtils;
+
+import java.util.ArrayList;
+import java.util.List;
+
+// LINT.IfChange
+@SearchIndexable
+public class WifiTetherSettings extends RestrictedDashboardFragment
+        implements WifiTetherBasePreferenceController.OnTetherConfigUpdateListener {
+
+    private static final String TAG = "WifiTetherSettings";
+    private static final IntentFilter TETHER_STATE_CHANGE_FILTER;
+    private static final String KEY_WIFI_TETHER_SCREEN = "wifi_tether_settings_screen";
+// QTI_BEGIN: 2021-05-18: WLAN: Revert "Smart Router settings UI changes"
+    private static final int EXPANDED_CHILD_COUNT_WITH_SECURITY_NON = 3;
+// QTI_END: 2021-05-18: WLAN: Revert "Smart Router settings UI changes"
+// QTI_BEGIN: 2021-08-18: WLAN: Remove none, wpa2-personal and wpa2/wpa3-personal security for 6GHz Band
+    private static boolean mWasApBand6GHzSelected = false;
+// QTI_END: 2021-08-18: WLAN: Remove none, wpa2-personal and wpa2/wpa3-personal security for 6GHz Band
+// QTI_BEGIN: 2024-01-22: Android_UI: Avoid accessing AP Band preference controller when Wi-Fi Hotspot Speed Feature is enabled
+    boolean mShouldHidePreference;
+// QTI_END: 2024-01-22: Android_UI: Avoid accessing AP Band preference controller when Wi-Fi Hotspot Speed Feature is enabled
+
+    @VisibleForTesting
+    static final String KEY_WIFI_TETHER_NETWORK_NAME = "wifi_tether_network_name";
+    @VisibleForTesting
+    static final String KEY_WIFI_TETHER_SECURITY = "wifi_tether_security";
+    @VisibleForTesting
+    static final String KEY_WIFI_TETHER_NETWORK_PASSWORD = "wifi_tether_network_password";
+    @VisibleForTesting
+    static final String KEY_WIFI_TETHER_AUTO_OFF = "wifi_tether_auto_turn_off";
+    @VisibleForTesting
+// QTI_BEGIN: 2021-05-18: WLAN: Revert "Smart Router settings UI changes"
+    static final String KEY_WIFI_TETHER_NETWORK_AP_BAND = "wifi_tether_network_ap_band";
+// QTI_END: 2021-05-18: WLAN: Revert "Smart Router settings UI changes"
+    @VisibleForTesting
+    static final String KEY_WIFI_TETHER_MAXIMIZE_COMPATIBILITY =
+            WifiTetherMaximizeCompatibilityPreferenceController.PREF_KEY;
+    @VisibleForTesting
+    static final String KEY_WIFI_HOTSPOT_SECURITY = "wifi_hotspot_security";
+    @VisibleForTesting
+    static final String KEY_WIFI_HOTSPOT_SPEED = "wifi_hotspot_speed";
+    @VisibleForTesting
+    static final String KEY_INSTANT_HOTSPOT = "wifi_hotspot_instant";
+
+    @VisibleForTesting
+    SettingsMainSwitchBar mMainSwitchBar;
+    private WifiTetherSwitchBarController mSwitchBarController;
+    @VisibleForTesting
+    WifiTetherSSIDPreferenceController mSSIDPreferenceController;
+    @VisibleForTesting
+    WifiTetherPasswordPreferenceController mPasswordPreferenceController;
+// QTI_BEGIN: 2021-05-18: WLAN: Revert "Smart Router settings UI changes"
+    private WifiTetherApBandPreferenceController mApBandPreferenceController;
+// QTI_END: 2021-05-18: WLAN: Revert "Smart Router settings UI changes"
+    @VisibleForTesting
+    WifiTetherSecurityPreferenceController mSecurityPreferenceController;
+    @VisibleForTesting
+    WifiTetherAutoOffPreferenceController mWifiTetherAutoOffPreferenceController;
+
+    private WifiManager mWifiManager;
+    @VisibleForTesting
+    boolean mUnavailable;
+    private WifiRestriction mWifiRestriction;
+// QTI_BEGIN: 2021-07-13: WLAN: Softap: Add support for OWE Security for Softap Configuration.
+    private boolean wasApBandPrefUpdated = false;
+// QTI_END: 2021-07-13: WLAN: Softap: Add support for OWE Security for Softap Configuration.
+
+    @VisibleForTesting
+    TetherChangeReceiver mTetherChangeReceiver;
+
+    @VisibleForTesting
+    WifiTetherViewModel mWifiTetherViewModel;
+    @VisibleForTesting
+    Preference mWifiHotspotSecurity;
+    @VisibleForTesting
+    Preference mWifiHotspotSpeed;
+    @VisibleForTesting
+    Preference mInstantHotspot;
+
+    static {
+        TETHER_STATE_CHANGE_FILTER = new IntentFilter(WIFI_AP_STATE_CHANGED_ACTION);
+    }
+
+    public WifiTetherSettings() {
+        super(UserManager.DISALLOW_CONFIG_TETHERING);
+        mWifiRestriction = new WifiRestriction();
+    }
+
+    public WifiTetherSettings(WifiRestriction wifiRestriction) {
+        super(UserManager.DISALLOW_CONFIG_TETHERING);
+        mWifiRestriction = wifiRestriction;
+    }
+
+    @Override
+    public int getMetricsCategory() {
+        return SettingsEnums.WIFI_TETHER_SETTINGS;
+    }
+
+    @Override
+    protected String getLogTag() {
+        return "WifiTetherSettings";
+    }
+
+    @Override
+    public void onCreate(Bundle icicle) {
+        super.onCreate(icicle);
+// QTI_BEGIN: 2024-01-22: Android_UI: Avoid accessing AP Band preference controller when Wi-Fi Hotspot Speed Feature is enabled
+        mShouldHidePreference = FeatureFactory.getFeatureFactory()
+                .getWifiFeatureProvider().getWifiHotspotRepository().isSpeedFeatureAvailable();
+// QTI_END: 2024-01-22: Android_UI: Avoid accessing AP Band preference controller when Wi-Fi Hotspot Speed Feature is enabled
+        if (!canShowWifiHotspot(getContext())) {
+            Log.e(TAG, "can not launch Wi-Fi hotspot settings"
+                    + " because the config is not set to show.");
+            finish();
+            return;
+        }
+        if (!WifiUtils.isWifiMultiuserEnabled()) {
+            setIfOnlyAvailableForAdmins(true);
+        }
+        mUnavailable = isUiRestricted() || !mWifiRestriction.isHotspotAvailable(getContext());
+        if (mUnavailable) {
+            return;
+        }
+
+        mWifiTetherViewModel = FeatureFactory.getFeatureFactory().getWifiFeatureProvider()
+                .getWifiTetherViewModel(this);
+        if (mWifiTetherViewModel != null) {
+            setupSpeedFeature(mWifiTetherViewModel.isSpeedFeatureAvailable());
+            setupInstantHotspot(mWifiTetherViewModel.isInstantHotspotFeatureAvailable());
+            mWifiTetherViewModel.getRestarting().observe(this, this::onRestartingChanged);
+        }
+    }
+
+    @VisibleForTesting
+    void setupSpeedFeature(boolean isSpeedFeatureAvailable) {
+        mWifiHotspotSecurity = findPreference(KEY_WIFI_HOTSPOT_SECURITY);
+        mWifiHotspotSpeed = findPreference(KEY_WIFI_HOTSPOT_SPEED);
+        if (mWifiHotspotSecurity == null || mWifiHotspotSpeed == null) {
+            return;
+        }
+        mWifiHotspotSecurity.setVisible(isSpeedFeatureAvailable);
+        mWifiHotspotSpeed.setVisible(isSpeedFeatureAvailable);
+
+        // Speed feature supersedes the legacy Extend compatibility toggle; hide it when on.
+        Preference maximizeCompatibility = findPreference(KEY_WIFI_TETHER_MAXIMIZE_COMPATIBILITY);
+        if (maximizeCompatibility != null) {
+            maximizeCompatibility.setVisible(!isSpeedFeatureAvailable);
+        }
+
+        if (isSpeedFeatureAvailable) {
+            mWifiTetherViewModel.getSecuritySummary().observe(this, this::onSecuritySummaryChanged);
+            mWifiTetherViewModel.getSpeedSummary().observe(this, this::onSpeedSummaryChanged);
+        }
+    }
+
+    @VisibleForTesting
+    void setupInstantHotspot(boolean isFeatureAvailable) {
+        if (!isFeatureAvailable) {
+            return;
+        }
+        mInstantHotspot = findPreference(KEY_INSTANT_HOTSPOT);
+        if (mInstantHotspot == null) {
+            Log.e(TAG, "Failed to find Instant Hotspot preference:" + KEY_INSTANT_HOTSPOT);
+            return;
+        }
+        mWifiTetherViewModel.getInstantHotspotSummary()
+                .observe(this, this::onInstantHotspotChanged);
+        mInstantHotspot.setOnPreferenceClickListener(p -> {
+            mWifiTetherViewModel.launchInstantHotspotSettings();
+            return true;
+        });
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mWifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+        mTetherChangeReceiver = new TetherChangeReceiver();
+
+        if (!isCatalystEnabled()) {
+            mSSIDPreferenceController = use(WifiTetherSSIDPreferenceController.class);
+            mWifiTetherAutoOffPreferenceController =
+                    use(WifiTetherAutoOffPreferenceController.class);
+        }
+        mSecurityPreferenceController = use(WifiTetherSecurityPreferenceController.class);
+        mPasswordPreferenceController = use(WifiTetherPasswordPreferenceController.class);
+// QTI_BEGIN: 2021-05-18: WLAN: Revert "Smart Router settings UI changes"
+        mApBandPreferenceController = use(WifiTetherApBandPreferenceController.class);
+// QTI_END: 2021-05-18: WLAN: Revert "Smart Router settings UI changes"
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        if (mUnavailable) {
+            return;
+        }
+
+        if (!isCatalystEnabled()) {
+            // Assume we are in a SettingsActivity. This is only safe because we currently use
+            // SettingsActivity as base for all preference fragments.
+            final SettingsActivity activity = (SettingsActivity) getActivity();
+            mMainSwitchBar = activity.getSwitchBar();
+            mMainSwitchBar.setTitle(getString(R.string.use_wifi_hotsopt_main_switch_title));
+            mSwitchBarController = new WifiTetherSwitchBarController(activity, mMainSwitchBar);
+            getSettingsLifecycle().addObserver(mSwitchBarController);
+            mMainSwitchBar.show();
+        }
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        if (!mWifiRestriction.isHotspotAvailable(getContext())) {
+            getEmptyTextView().setText(R.string.not_allowed_by_ent);
+            getPreferenceScreen().removeAll();
+            return;
+        }
+        if (mUnavailable) {
+            if (!isUiRestrictedByOnlyAdmin()) {
+                getEmptyTextView()
+                        .setText(com.android.settingslib.R.string.tethering_settings_not_available);
+            }
+            getPreferenceScreen().removeAll();
+            return;
+        }
+        final Context context = getContext();
+        if (context != null) {
+            context.registerReceiver(mTetherChangeReceiver, TETHER_STATE_CHANGE_FILTER,
+                    Context.RECEIVER_EXPORTED_UNAUDITED);
+            // The intent WIFI_AP_STATE_CHANGED_ACTION is not sticky intent anymore after SC-V2
+            // Handle the initial state after register the receiver.
+            updateDisplayWithNewConfig();
+        }
+        mWifiTetherViewModel.refresh();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (mUnavailable) {
+            return;
+        }
+        final Context context = getContext();
+        if (context != null) {
+            context.unregisterReceiver(mTetherChangeReceiver);
+        }
+    }
+
+    protected void onSecuritySummaryChanged(Integer securityResId) {
+        mWifiHotspotSecurity.setSummary(securityResId);
+    }
+
+    protected void onSpeedSummaryChanged(Integer summaryResId) {
+        mWifiHotspotSpeed.setSummary(summaryResId);
+    }
+
+    @Override
+    protected int getPreferenceScreenResId() {
+        return R.xml.wifi_tether_settings;
+    }
+
+    @Override
+    protected List<AbstractPreferenceController> createPreferenceControllers(Context context) {
+        return buildPreferenceControllers(context, this::onTetherConfigUpdated);
+    }
+
+    private static List<AbstractPreferenceController> buildPreferenceControllers(Context context,
+            WifiTetherBasePreferenceController.OnTetherConfigUpdateListener listener) {
+        final List<AbstractPreferenceController> controllers = new ArrayList<>();
+        controllers.add(new WifiTetherSSIDPreferenceController(context, listener));
+        controllers.add(new WifiTetherSecurityPreferenceController(context, listener));
+        controllers.add(new WifiTetherPasswordPreferenceController(context, listener));
+// QTI_BEGIN: 2021-05-18: WLAN: Revert "Smart Router settings UI changes"
+        controllers.add(new WifiTetherApBandPreferenceController(context, listener));
+// QTI_END: 2021-05-18: WLAN: Revert "Smart Router settings UI changes"
+        controllers.add(
+                new WifiTetherAutoOffPreferenceController(context, KEY_WIFI_TETHER_AUTO_OFF));
+
+        return controllers;
+    }
+
+    @Override
+    public void onTetherConfigUpdated(AbstractPreferenceController context) {
+// QTI_BEGIN: 2021-08-18: WLAN: Remove none, wpa2-personal and wpa2/wpa3-personal security for 6GHz Band
+        SoftApConfiguration config = buildNewConfig();
+// QTI_END: 2021-08-18: WLAN: Remove none, wpa2-personal and wpa2/wpa3-personal security for 6GHz Band
+        mPasswordPreferenceController.setSecurityType(config.getSecurityType());
+
+        mWifiTetherViewModel.setSoftApConfiguration(config);
+
+// QTI_BEGIN: 2021-07-13: WLAN: Softap: Add support for OWE Security for Softap Configuration.
+        if (mSecurityPreferenceController.isOweDualSapSupported()) {
+// QTI_END: 2021-07-13: WLAN: Softap: Add support for OWE Security for Softap Configuration.
+            if (config.getSecurityType() == SoftApConfiguration.SECURITY_TYPE_WPA3_OWE_TRANSITION
+                        || config.getSecurityType() == SoftApConfiguration.SECURITY_TYPE_WPA3_OWE) {
+// QTI_BEGIN: 2021-07-13: WLAN: Softap: Add support for OWE Security for Softap Configuration.
+                mApBandPreferenceController.updatePreferenceEntries();
+                mApBandPreferenceController.updateDisplay();
+                wasApBandPrefUpdated = true;
+// QTI_END: 2021-07-13: WLAN: Softap: Add support for OWE Security for Softap Configuration.
+// QTI_BEGIN: 2021-08-20: WLAN: wifi: correct code logic to update AP band preferences
+            } else if (wasApBandPrefUpdated
+// QTI_END: 2021-08-20: WLAN: wifi: correct code logic to update AP band preferences
+                   && (config.getSecurityType() != SoftApConfiguration.SECURITY_TYPE_WPA3_OWE_TRANSITION
+                       && config.getSecurityType() != SoftApConfiguration.SECURITY_TYPE_WPA3_OWE)) {
+// QTI_BEGIN: 2021-07-13: WLAN: Softap: Add support for OWE Security for Softap Configuration.
+                mApBandPreferenceController.updatePreferenceEntries();
+                mApBandPreferenceController.updateDisplay();
+                wasApBandPrefUpdated = false;
+            }
+        }
+
+// QTI_END: 2021-07-13: WLAN: Softap: Add support for OWE Security for Softap Configuration.
+        if ((mApBandPreferenceController.getBandIndex() & SoftApConfiguration.BAND_6GHZ) != 0
+// QTI_BEGIN: 2021-08-18: WLAN: Remove none, wpa2-personal and wpa2/wpa3-personal security for 6GHz Band
+                && (mWasApBand6GHzSelected == false)) {
+            mSecurityPreferenceController.updateDisplay();
+            mWasApBand6GHzSelected = true;
+            config = buildNewConfig();
+// QTI_END: 2021-08-18: WLAN: Remove none, wpa2-personal and wpa2/wpa3-personal security for 6GHz Band
+            mPasswordPreferenceController.setSecurityType(config.getSecurityType());
+// QTI_BEGIN: 2021-08-18: WLAN: Remove none, wpa2-personal and wpa2/wpa3-personal security for 6GHz Band
+            mWifiManager.setSoftApConfiguration(config);
+// QTI_END: 2021-08-18: WLAN: Remove none, wpa2-personal and wpa2/wpa3-personal security for 6GHz Band
+        } else if ((mApBandPreferenceController.getBandIndex() & SoftApConfiguration.BAND_6GHZ) == 0
+// QTI_BEGIN: 2021-08-18: WLAN: Remove none, wpa2-personal and wpa2/wpa3-personal security for 6GHz Band
+                &&(mWasApBand6GHzSelected == true)) {
+            mSecurityPreferenceController.updateDisplay();
+            mWasApBand6GHzSelected = false;
+        }
+// QTI_END: 2021-08-18: WLAN: Remove none, wpa2-personal and wpa2/wpa3-personal security for 6GHz Band
+    }
+
+    @VisibleForTesting
+    void onRestartingChanged(Boolean restarting) {
+        if (!isCatalystEnabled()) {
+            mMainSwitchBar.setVisibility((restarting) ? INVISIBLE : VISIBLE);
+        }
+        setLoading(restarting, false);
+    }
+
+    @VisibleForTesting
+    void onInstantHotspotChanged(String summary) {
+        if (summary == null) {
+            mInstantHotspot.setVisible(false);
+            return;
+        }
+        mInstantHotspot.setVisible(true);
+        mInstantHotspot.setSummary(summary);
+    }
+
+    @VisibleForTesting
+    SoftApConfiguration buildNewConfig() {
+        SoftApConfiguration currentConfig = mWifiTetherViewModel.getSoftApConfiguration();
+        SoftApConfiguration.Builder configBuilder = new SoftApConfiguration.Builder(currentConfig);
+        if (!isCatalystEnabled()) {
+            configBuilder.setSsid(mSSIDPreferenceController.getSSID());
+            configBuilder.setAutoShutdownEnabled(
+                    mWifiTetherAutoOffPreferenceController.isEnabled());
+        }
+        int securityType =
+                mWifiTetherViewModel.isSpeedFeatureAvailable()
+                        ? currentConfig.getSecurityType()
+                        : mSecurityPreferenceController.getSecurityType();
+// QTI_BEGIN: 2022-10-06: WLAN: HotSpot: Use OWE only mode with 6GHz band option
+        // For 6GHz use OWE only mode.
+        if ((mApBandPreferenceController.getBandIndex() & SoftApConfiguration.BAND_6GHZ) != 0
+                 && securityType == SoftApConfiguration.SECURITY_TYPE_WPA3_OWE_TRANSITION) {
+            securityType = SoftApConfiguration.SECURITY_TYPE_WPA3_OWE;
+        }
+
+// QTI_END: 2022-10-06: WLAN: HotSpot: Use OWE only mode with 6GHz band option
+// QTI_BEGIN: 2021-07-13: WLAN: Softap: Add support for OWE Security for Softap Configuration.
+        if (securityType == SoftApConfiguration.SECURITY_TYPE_OPEN
+// QTI_END: 2021-07-13: WLAN: Softap: Add support for OWE Security for Softap Configuration.
+// QTI_BEGIN: 2022-10-06: WLAN: HotSpot: Use updated SoftApConfiguration.SECURITY_TYPE_WPA3_OWE_TRANSITION
+              || securityType == SoftApConfiguration.SECURITY_TYPE_WPA3_OWE_TRANSITION
+              || securityType == SoftApConfiguration.SECURITY_TYPE_WPA3_OWE) {
+// QTI_END: 2022-10-06: WLAN: HotSpot: Use updated SoftApConfiguration.SECURITY_TYPE_WPA3_OWE_TRANSITION
+// QTI_BEGIN: 2021-07-13: WLAN: Softap: Add support for OWE Security for Softap Configuration.
+            configBuilder.setPassphrase(null, securityType);
+        } else {
+// QTI_END: 2021-07-13: WLAN: Softap: Add support for OWE Security for Softap Configuration.
+            configBuilder.setPassphrase(
+                    mPasswordPreferenceController.getPasswordValidated(securityType),
+                    securityType);
+        }
+// QTI_BEGIN: 2021-07-13: WLAN: Softap: Add support for Dual Band (2G+5G) configuration from UI
+        if (mApBandPreferenceController.getBandIndex() == BAND_BOTH_2G_5G) {
+// QTI_END: 2021-07-13: WLAN: Softap: Add support for Dual Band (2G+5G) configuration from UI
+// QTI_BEGIN: 2021-07-13: WLAN: Softap: Add support for OWE Security for Softap Configuration.
+            // Fallback to 2G band if user selected OWE+Dual band
+// QTI_END: 2021-07-13: WLAN: Softap: Add support for OWE Security for Softap Configuration.
+            if (securityType == SoftApConfiguration.SECURITY_TYPE_WPA3_OWE_TRANSITION
+                    || securityType == SoftApConfiguration.SECURITY_TYPE_WPA3_OWE) {
+// QTI_BEGIN: 2021-07-13: WLAN: Softap: Add support for OWE Security for Softap Configuration.
+                configBuilder.setBand(SoftApConfiguration.BAND_2GHZ);
+            } else {
+                int[] dualBands = new int[] {
+                       SoftApConfiguration.BAND_2GHZ, SoftApConfiguration.BAND_5GHZ};
+                configBuilder.setBands(dualBands);
+            }
+// QTI_END: 2021-07-13: WLAN: Softap: Add support for OWE Security for Softap Configuration.
+// QTI_BEGIN: 2024-01-22: Android_UI: Avoid accessing AP Band preference controller when Wi-Fi Hotspot Speed Feature is enabled
+        } else if (!mShouldHidePreference) {
+// QTI_END: 2024-01-22: Android_UI: Avoid accessing AP Band preference controller when Wi-Fi Hotspot Speed Feature is enabled
+// QTI_BEGIN: 2021-07-13: WLAN: Softap: Add support for Dual Band (2G+5G) configuration from UI
+            configBuilder.setBand(mApBandPreferenceController.getBandIndex());
+        }
+// QTI_END: 2021-07-13: WLAN: Softap: Add support for Dual Band (2G+5G) configuration from UI
+        return configBuilder.build();
+    }
+
+    private void updateDisplayWithNewConfig() {
+        if (!isCatalystEnabled()) {
+            use(WifiTetherSSIDPreferenceController.class)
+                    .updateDisplay();
+        }
+// QTI_BEGIN: 2021-05-18: WLAN: Revert "Smart Router settings UI changes"
+        use(WifiTetherSecurityPreferenceController.class)
+                .updateDisplay();
+        use(WifiTetherPasswordPreferenceController.class)
+                .updateDisplay();
+        use(WifiTetherApBandPreferenceController.class)
+                .updateDisplay();
+// QTI_END: 2021-05-18: WLAN: Revert "Smart Router settings UI changes"
+    }
+
+    @Override
+    public @Nullable String getPreferenceScreenBindingKey(@NonNull Context context) {
+        return WifiHotspotScreen.KEY;
+    }
+
+    public static final SearchIndexProvider SEARCH_INDEX_DATA_PROVIDER =
+            new SearchIndexProvider(R.xml.wifi_tether_settings);
+
+    @VisibleForTesting
+    static class SearchIndexProvider extends BaseSearchIndexProvider {
+
+        private final WifiRestriction mWifiRestriction;
+        private final boolean mIsInstantHotspotEnabled;
+
+        SearchIndexProvider(int xmlRes) {
+            super(xmlRes);
+            mWifiRestriction = new WifiRestriction();
+            mIsInstantHotspotEnabled = SharedConnectivityRepository.isDeviceConfigEnabled();
+        }
+
+        @VisibleForTesting
+        SearchIndexProvider(int xmlRes, WifiRestriction wifiRestriction,
+                boolean isInstantHotspotEnabled) {
+            super(xmlRes);
+            mWifiRestriction = wifiRestriction;
+            mIsInstantHotspotEnabled = isInstantHotspotEnabled;
+        }
+
+        @Override
+        public List<String> getNonIndexableKeys(Context context) {
+            final List<String> keys = super.getNonIndexableKeys(context);
+
+            if (!mWifiRestriction.isTetherAvailable(context)
+                    || !mWifiRestriction.isHotspotAvailable(context)) {
+                keys.add(KEY_WIFI_TETHER_NETWORK_NAME);
+                keys.add(KEY_WIFI_TETHER_SECURITY);
+                keys.add(KEY_WIFI_HOTSPOT_SECURITY);
+                keys.add(KEY_WIFI_TETHER_NETWORK_PASSWORD);
+                keys.add(KEY_WIFI_TETHER_AUTO_OFF);
+                keys.add(KEY_WIFI_TETHER_NETWORK_AP_BAND);
+                keys.add(KEY_WIFI_TETHER_MAXIMIZE_COMPATIBILITY);
+                keys.add(KEY_WIFI_HOTSPOT_SPEED);
+                keys.add(KEY_INSTANT_HOTSPOT);
+            } else {
+                if (!isSpeedFeatureAvailable()) {
+                    keys.add(KEY_WIFI_HOTSPOT_SECURITY);
+                    keys.add(KEY_WIFI_HOTSPOT_SPEED);
+                } else {
+                    // Also hide legacy Extend compatibility from search when Speed is on.
+                    keys.add(KEY_WIFI_TETHER_MAXIMIZE_COMPATIBILITY);
+                }
+                if (!mIsInstantHotspotEnabled) {
+                    keys.add(KEY_INSTANT_HOTSPOT);
+                }
+            }
+
+            // Remove duplicate
+            keys.add(KEY_WIFI_TETHER_SCREEN);
+            return keys;
+        }
+
+        @Override
+        protected boolean isPageSearchEnabled(Context context) {
+            if (context == null) {
+                return false;
+            }
+            UserManager userManager = context.getSystemService(UserManager.class);
+            if (userManager == null || !userManager.isAdminUser()) {
+                return false;
+            }
+            if (!WifiUtils.canShowWifiHotspot(context)) {
+                return false;
+            }
+            return !FeatureFlagUtils.isEnabled(context, FeatureFlags.TETHER_ALL_IN_ONE);
+        }
+
+        @Override
+        public List<AbstractPreferenceController> createPreferenceControllers(Context context) {
+            return buildPreferenceControllers(context, null /* listener */);
+        }
+
+        @VisibleForTesting
+        boolean isSpeedFeatureAvailable() {
+            return FeatureFactory.getFeatureFactory().getWifiFeatureProvider()
+                    .getWifiHotspotRepository().isSpeedFeatureAvailable();
+        }
+    }
+
+    @VisibleForTesting
+    static class WifiRestriction {
+        public boolean isTetherAvailable(@Nullable Context context) {
+            if (context == null) return true;
+            return TetherUtil.isTetherAvailable(context);
+        }
+
+        public boolean isHotspotAvailable(@Nullable Context context) {
+            if (context == null) return true;
+            return WifiEnterpriseRestrictionUtils.isWifiTetheringAllowed(context);
+        }
+    }
+
+    @VisibleForTesting
+    class TetherChangeReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context content, Intent intent) {
+            String action = intent.getAction();
+            Log.d(TAG, "updating display config due to receiving broadcast action " + action);
+            updateDisplayWithNewConfig();
+        }
+    }
+}
+// LINT.ThenChange(WifiHotspotScreen.kt)

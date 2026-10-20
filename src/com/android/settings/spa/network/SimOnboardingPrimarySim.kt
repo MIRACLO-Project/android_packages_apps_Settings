@@ -1,0 +1,218 @@
+/*
+ * Copyright (C) 2024 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+// QTI_BEGIN: 2024-12-11: Telephony: Enable Dual SIM onboarding feature in Settings
+/*
+ * Changes from Qualcomm Innovation Center, Inc. are provided under the following license:
+// QTI_END: 2024-12-11: Telephony: Enable Dual SIM onboarding feature in Settings
+// QTI_BEGIN: 2025-01-16: Telephony: Fix mobile data greyed out issue
+ * Copyright (c) 2024-2025 Qualcomm Innovation Center, Inc. All rights reserved.
+// QTI_END: 2025-01-16: Telephony: Fix mobile data greyed out issue
+// QTI_BEGIN: 2024-12-11: Telephony: Enable Dual SIM onboarding feature in Settings
+ * SPDX-License-Identifier: BSD-3-Clause-Clear
+ */
+
+// QTI_END: 2024-12-11: Telephony: Enable Dual SIM onboarding feature in Settings
+package com.android.settings.spa.network
+
+// QTI_BEGIN: 2024-12-11: Telephony: Enable Dual SIM onboarding feature in Settings
+import android.provider.Settings
+// QTI_END: 2024-12-11: Telephony: Enable Dual SIM onboarding feature in Settings
+import android.telephony.SubscriptionManager
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.SignalCellularAlt
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableIntState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.android.settings.R
+import com.android.settings.network.SimOnboardingService
+// QTI_BEGIN: 2024-12-11: Telephony: Enable Dual SIM onboarding feature in Settings
+import com.android.settings.network.telephony.TelephonyUtils
+// QTI_END: 2024-12-11: Telephony: Enable Dual SIM onboarding feature in Settings
+import com.android.settingslib.spa.widget.preference.ListPreference
+import com.android.settingslib.spa.widget.preference.ListPreferenceModel
+import com.android.settingslib.spa.widget.preference.ListPreferenceOption
+import com.android.settingslib.spa.widget.scaffold.BottomAppBarButton
+import com.android.settingslib.spa.widget.scaffold.GlifScaffold
+import com.android.settingslib.spa.widget.ui.Category
+import com.android.settingslib.spa.widget.ui.SettingsIcon
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
+
+/** the sim onboarding primary sim compose */
+@Composable
+fun SimOnboardingPrimarySimImpl(
+    nextAction: () -> Unit,
+    cancelAction: () -> Unit,
+    onboardingService: SimOnboardingService,
+) {
+    GlifScaffold(
+        imageVector = Icons.Outlined.SignalCellularAlt,
+        title = stringResource(id = R.string.sim_onboarding_primary_sim_title),
+        description = stringResource(id = R.string.sim_onboarding_primary_sim_msg),
+        actionButton =
+            BottomAppBarButton(text = stringResource(id = R.string.done), onClick = nextAction),
+        dismissButton =
+            BottomAppBarButton(text = stringResource(id = R.string.cancel), onClick = cancelAction),
+    ) {
+        val callsSelectedId = rememberSaveable {
+            mutableIntStateOf(SubscriptionManager.INVALID_SUBSCRIPTION_ID)
+        }
+        val textsSelectedId = rememberSaveable {
+            mutableIntStateOf(SubscriptionManager.INVALID_SUBSCRIPTION_ID)
+        }
+        val mobileDataSelectedId = rememberSaveable {
+            mutableIntStateOf(SubscriptionManager.INVALID_SUBSCRIPTION_ID)
+        }
+
+        val context = LocalContext.current
+        val primarySimInfo =
+            remember {
+                    flow {
+                            val selectableSubInfoList =
+                                onboardingService.getSelectedSubscriptionInfoListWithRenaming()
+                            emit(
+                                PrimarySimRepository(context)
+                                    .getPrimarySimInfo(selectableSubInfoList)
+                            )
+                        }
+                        .flowOn(Dispatchers.Default)
+                }
+                .collectAsStateWithLifecycle(initialValue = null)
+                .value ?: return@GlifScaffold
+
+        if (
+            !primarySimInfo.callsList.any { it.id == onboardingService.targetPrimarySimCalls } &&
+                primarySimInfo.callsList.isNotEmpty()
+        ) {
+            onboardingService.targetPrimarySimCalls = primarySimInfo.callsList[0].id
+        }
+        if (
+            !primarySimInfo.smsList.any { it.id == onboardingService.targetPrimarySimTexts } &&
+                primarySimInfo.smsList.isNotEmpty()
+        ) {
+            onboardingService.targetPrimarySimTexts = primarySimInfo.smsList[0].id
+        }
+        if (
+            !primarySimInfo.dataList.any {
+                it.id == onboardingService.targetPrimarySimMobileData
+            } && primarySimInfo.dataList.isNotEmpty()
+        ) {
+            onboardingService.targetPrimarySimMobileData = primarySimInfo.dataList[0].id
+        }
+        callsSelectedId.intValue = onboardingService.targetPrimarySimCalls
+        textsSelectedId.intValue = onboardingService.targetPrimarySimTexts
+        mobileDataSelectedId.intValue = onboardingService.targetPrimarySimMobileData
+        val isAutoDataEnabled by
+            onboardingService.targetPrimarySimAutoDataSwitch.collectAsStateWithLifecycle(
+                initialValue = null
+            )
+        Category {
+            PrimarySimImpl(
+                primarySimInfo = primarySimInfo,
+                callsSelectedId = callsSelectedId,
+                textsSelectedId = textsSelectedId,
+                mobileDataSelectedId = mobileDataSelectedId,
+                actionSetCalls = {
+                    callsSelectedId.intValue = it
+                    onboardingService.targetPrimarySimCalls = it
+                },
+                actionSetTexts = {
+                    textsSelectedId.intValue = it
+                    onboardingService.targetPrimarySimTexts = it
+                },
+                actionSetMobileData = {
+                    // Save user preferred subscription to settings database
+                    val SETTING_USER_PREF_DATA_SUB: String = "user_preferred_data_sub"
+                    Settings.Global.putInt(context.getContentResolver(), SETTING_USER_PREF_DATA_SUB, it)
+                    mobileDataSelectedId.intValue = it
+                    onboardingService.targetPrimarySimMobileData = it
+                },
+            )
+        }
+        Category {
+            if (!TelephonyUtils.isSmartDdsSwitchFeatureAvailable()) {
+                AutomaticDataSwitchingPreference(
+                    isAutoDataEnabled = { isAutoDataEnabled },
+                    setAutoDataEnabled = { newEnabled ->
+                        onboardingService.targetPrimarySimAutoDataSwitch.value = newEnabled
+                    },
+                )
+            }
+// QTI_BEGIN: 2024-12-11: Telephony: Enable Dual SIM onboarding feature in Settings
+        }
+// QTI_END: 2024-12-11: Telephony: Enable Dual SIM onboarding feature in Settings
+    }
+}
+
+// QTI_BEGIN: 2025-01-16: Telephony: Fix mobile data greyed out issue
+@Composable
+fun CreatePrimarySimListPreference(
+        title: String,
+        list: List<ListPreferenceOption>,
+        selectedId: MutableIntState,
+        icon: ImageVector,
+        onIdSelected: (id: Int) -> Unit,
+) = ListPreference(
+    object : ListPreferenceModel {
+        override val title = title
+        override val options = list
+        override val selectedId = selectedId
+        override val onIdSelected = onIdSelected
+// QTI_END: 2025-01-16: Telephony: Fix mobile data greyed out issue
+        override val icon = @Composable { SettingsIcon(icon) }
+// QTI_BEGIN: 2025-01-16: Telephony: Fix mobile data greyed out issue
+        }
+// QTI_END: 2025-01-16: Telephony: Fix mobile data greyed out issue
+    )
+
+@Composable
+fun CreatePrimarySimListPreference(
+        title: String,
+        list: List<ListPreferenceOption>,
+        selectedId: MutableIntState,
+        icon: ImageVector,
+// QTI_BEGIN: 2024-12-11: Telephony: Enable Dual SIM onboarding feature in Settings
+        onIdSelected: (id: Int) -> Unit,
+        isSelectable: Boolean
+// QTI_END: 2024-12-11: Telephony: Enable Dual SIM onboarding feature in Settings
+) = ListPreference(
+    object : ListPreferenceModel {
+        override val title = title
+        override val options = list
+        override val selectedId = selectedId
+        override val onIdSelected = onIdSelected
+        override val icon = @Composable {
+            SettingsIcon(icon)
+        }
+// QTI_BEGIN: 2024-12-11: Telephony: Enable Dual SIM onboarding feature in Settings
+        // In case of Calls & SMS preference, this is always true.
+        // For default data preference, the UI is greyed out when
+        // SmartDDS is enabled and device in ECBM/SCBM mode and
+        // when a call is active on any of the subscriptions
+        override val enabled = { isSelectable }
+// QTI_END: 2024-12-11: Telephony: Enable Dual SIM onboarding feature in Settings
+// QTI_BEGIN: 2025-01-16: Telephony: Fix mobile data greyed out issue
+})
+// QTI_END: 2025-01-16: Telephony: Fix mobile data greyed out issue

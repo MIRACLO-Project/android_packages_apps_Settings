@@ -1,0 +1,110 @@
+/*
+ * Copyright (C) 2008 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.android.settings;
+
+import android.app.Dialog;
+import android.content.Context;
+// QTI_BEGIN: 2023-03-27: Android_UI: Settings: add SIM PIN input UI protection
+import android.os.Bundle;
+// QTI_END: 2023-03-27: Android_UI: Settings: add SIM PIN input UI protection
+import android.text.InputType;
+import android.util.AttributeSet;
+import android.view.View;
+// QTI_BEGIN: 2023-03-27: Android_UI: Settings: add SIM PIN input UI protection
+import android.view.WindowManager;
+// QTI_END: 2023-03-27: Android_UI: Settings: add SIM PIN input UI protection
+import android.widget.EditText;
+
+import com.android.settingslib.CustomEditTextPreferenceCompat;
+
+/**
+ * TODO: Add a soft dialpad for PIN entry.
+ */
+class EditPinPreference extends CustomEditTextPreferenceCompat {
+
+    interface OnPinEnteredListener {
+        void onPinEntered(EditPinPreference preference, boolean positiveResult);
+    }
+
+    private OnPinEnteredListener mPinListener;
+
+    public EditPinPreference(Context context, AttributeSet attrs) {
+        super(context, attrs);
+    }
+
+    public EditPinPreference(Context context, AttributeSet attrs, int defStyle) {
+        super(context, attrs, defStyle);
+    }
+
+    public void setOnPinEnteredListener(OnPinEnteredListener listener) {
+        mPinListener = listener;
+    }
+
+    @Override
+    protected void onBindDialogView(View view) {
+        super.onBindDialogView(view);
+
+        final EditText editText = (EditText) view.findViewById(android.R.id.edit);
+
+        if (editText != null) {
+            editText.setInputType(InputType.TYPE_CLASS_NUMBER |
+                    InputType.TYPE_NUMBER_VARIATION_PASSWORD);
+            editText.setTextAlignment(View.TEXT_ALIGNMENT_VIEW_START);
+        }
+    }
+
+    public boolean isDialogOpen() {
+        Dialog dialog = getDialog();
+        return dialog != null && dialog.isShowing();
+    }
+
+    @Override
+    protected void onDialogClosed(boolean positiveResult) {
+        super.onDialogClosed(positiveResult);
+        if (mPinListener != null) {
+            mPinListener.onPinEntered(this, positiveResult);
+        }
+    }
+
+    public void showPinDialog() {
+        Dialog dialog = getDialog();
+        if (dialog == null || !dialog.isShowing()) {
+            onClick();
+        }
+    }
+// QTI_BEGIN: 2023-03-27: Android_UI: Settings: add SIM PIN input UI protection
+
+    public static class EditPinDialogFragment extends
+            CustomPreferenceDialogFragment {
+
+        public static EditPinDialogFragment newInstance(String key) {
+            final EditPinDialogFragment fragment = new EditPinDialogFragment();
+            final Bundle b = new Bundle(1);
+            b.putString(ARG_KEY, key);
+            fragment.setArguments(b);
+            return fragment;
+        }
+
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            Dialog dialog = super.onCreateDialog(savedInstanceState);
+            dialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
+            return dialog;
+        }
+    }
+// QTI_END: 2023-03-27: Android_UI: Settings: add SIM PIN input UI protection
+}
