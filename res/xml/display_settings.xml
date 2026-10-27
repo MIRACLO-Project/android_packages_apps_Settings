@@ -52,6 +52,21 @@
 
     </PreferenceCategory>
 
+    <!-- MiraCLO: Quick Settings and shade options (Settings.Secure, read by SystemUI) -->
+    <PreferenceCategory
+        android:key="miraclo_category_quick_settings"
+        android:title="@string/miraclo_qs_category_title"
+        android:order="-195">
+
+        <com.android.settings.miraclo.SecureSettingListPreference
+            android:key="miraclo_qs_style"
+            android:title="@string/miraclo_qs_style_title"
+            android:entries="@array/miraclo_qs_style_entries"
+            android:entryValues="@array/miraclo_qs_style_values"
+            android:summary="@string/miraclo_qs_style_summary"
+            android:defaultValue="0" />
+    </PreferenceCategory>
+
     <PreferenceCategory
         android:key="category_lock_display"
         android:title="@string/category_name_lock_display"
