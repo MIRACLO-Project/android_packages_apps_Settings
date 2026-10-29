@@ -63,4 +63,8 @@
     <string name="miraclo_island_low_battery_title">Low battery</string>
     <string name="miraclo_island_low_battery_summary">Alerts at 20% and 10%</string>
     <string name="miraclo_island_footer">Hidden on the lock screen and in full-screen apps.</string>
+
+    <!-- Settings > Sound & vibration -->
+    <string name="miraclo_volume_panel_title">MiraCLO volume panel</string>
+    <string name="miraclo_volume_panel_summary">Compact edge panel. Turn off for the Android panel</string>
 </resources>
