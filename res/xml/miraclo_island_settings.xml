@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     SPDX-FileCopyrightText: MiraCLO
+     SPDX-License-Identifier: Apache-2.0
+-->
+<!-- MiraCLO: Settings > Notifications > Dynamic Island. Keys are Settings.Secure values read by
+     SystemUI's MiraCLOIslandController. -->
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:settings="http://schemas.android.com/apk/res-auto"
+    android:key="miraclo_island_settings"
+    android:title="@string/miraclo_island_title">
+
+    <com.android.settingslib.widget.LayoutPreference
+        android:key="miraclo_island_hero"
+        android:layout="@layout/miraclo_island_hero"
+        android:selectable="false"
+        settings:searchable="false" />
+
+    <com.android.settingslib.widget.MainSwitchPreference
+        android:key="miraclo_island_enabled"
+        android:title="@string/miraclo_island_enable_title"
+        android:persistent="false"
+        settings:controller="com.android.settings.notification.MiraCLOIslandMainSwitchPreferenceController" />
+
+    <PreferenceCategory
+        android:key="miraclo_island_sources"
+        android:title="@string/miraclo_island_sources_title">
+
+        <com.android.settings.miraclo.SecureSettingSwitchPreference
+            android:key="miraclo_island_media"
+            android:dependency="miraclo_island_enabled"
+            android:title="@string/miraclo_island_media_title"
+            android:summary="@string/miraclo_island_media_summary"
+            android:defaultValue="true" />
+
+        <com.android.settings.miraclo.SecureSettingSwitchPreference
+            android:key="miraclo_island_calls"
+            android:dependency="miraclo_island_enabled"
+            android:title="@string/miraclo_island_calls_title"
+            android:summary="@string/miraclo_island_calls_summary"
+            android:defaultValue="true" />
+
+        <com.android.settings.miraclo.SecureSettingSwitchPreference
+            android:key="miraclo_island_timers"
+            android:dependency="miraclo_island_enabled"
+            android:title="@string/miraclo_island_timers_title"
+            android:summary="@string/miraclo_island_timers_summary"
+            android:defaultValue="true" />
+
+        <com.android.settings.miraclo.SecureSettingSwitchPreference
+            android:key="miraclo_island_screen_record"
+            android:dependency="miraclo_island_enabled"
+            android:title="@string/miraclo_island_screen_record_title"
+            android:summary="@string/miraclo_island_screen_record_summary"
+            android:defaultValue="true" />
+
+        <com.android.settings.miraclo.SecureSettingSwitchPreference
+            android:key="miraclo_island_live_updates"
+            android:dependency="miraclo_island_enabled"
+            android:title="@string/miraclo_island_live_title"
+            android:summary="@string/miraclo_island_live_summary"
+            android:defaultValue="true" />
+
+        <com.android.settings.miraclo.SecureSettingSwitchPreference
+            android:key="miraclo_island_progress"
+            android:dependency="miraclo_island_enabled"
+            android:title="@string/miraclo_island_progress_title"
+            android:summary="@string/miraclo_island_progress_summary"
+            android:defaultValue="true" />
+
+        <com.android.settings.miraclo.SecureSettingSwitchPreference
+            android:key="miraclo_island_charging"
+            android:dependency="miraclo_island_enabled"
+            android:title="@string/miraclo_island_charging_title"
+            android:summary="@string/miraclo_island_charging_summary"
+            android:defaultValue="true" />
+
+        <com.android.settings.miraclo.SecureSettingSwitchPreference
+            android:key="miraclo_island_earbuds"
+            android:dependency="miraclo_island_enabled"
+            android:title="@string/miraclo_island_earbuds_title"
+            android:summary="@string/miraclo_island_earbuds_summary"
+            android:defaultValue="true" />
+
+        <com.android.settings.miraclo.SecureSettingSwitchPreference
+            android:key="miraclo_island_ringer"
+            android:dependency="miraclo_island_enabled"
+            android:title="@string/miraclo_island_ringer_title"
+            android:summary="@string/miraclo_island_ringer_summary"
+            android:defaultValue="true" />
+
+        <com.android.settings.miraclo.SecureSettingSwitchPreference
+            android:key="miraclo_island_low_battery"
+            android:dependency="miraclo_island_enabled"
+            android:title="@string/miraclo_island_low_battery_title"
+            android:summary="@string/miraclo_island_low_battery_summary"
+            android:defaultValue="true" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:key="miraclo_island_behaviour"
+        android:title="@string/miraclo_island_behaviour_title">
+
+        <com.android.settings.miraclo.SecureSettingSwitchPreference
+            android:key="miraclo_island_hide_while_open"
+            android:dependency="miraclo_island_enabled"
+            android:title="@string/miraclo_island_hide_while_open_title"
+            android:summary="@string/miraclo_island_hide_while_open_summary"
+            android:defaultValue="true" />
+
+        <com.android.settings.miraclo.SecureSettingSwitchPreference
+            android:key="miraclo_island_several"
+            android:dependency="miraclo_island_enabled"
+            android:title="@string/miraclo_island_several_title"
+            android:summary="@string/miraclo_island_several_summary"
+            android:defaultValue="true" />
+
+        <com.android.settings.miraclo.SecureSettingSwitchPreference
+            android:key="miraclo_island_paused_timeout"
+            android:dependency="miraclo_island_enabled"
+            android:title="@string/miraclo_island_paused_timeout_title"
+            android:summary="@string/miraclo_island_paused_timeout_summary"
+            android:defaultValue="true" />
+
+        <com.android.settings.miraclo.SecureSettingSwitchPreference
+            android:key="miraclo_island_touch_glow"
+            android:dependency="miraclo_island_enabled"
+            android:title="@string/miraclo_island_touch_glow_title"
+            android:summary="@string/miraclo_island_touch_glow_summary"
+            android:defaultValue="true" />
+
+        <com.android.settings.miraclo.SecureSettingSwitchPreference
+            android:key="miraclo_island_ambient_glow"
+            android:dependency="miraclo_island_enabled"
+            android:title="@string/miraclo_island_ambient_glow_title"
+            android:summary="@string/miraclo_island_ambient_glow_summary"
+            android:defaultValue="true" />
+
+        <com.android.settings.miraclo.SecureSettingSwitchPreference
+            android:key="miraclo_island_haptics"
+            android:dependency="miraclo_island_enabled"
+            android:title="@string/miraclo_island_haptics_title"
+            android:summary="@string/miraclo_island_haptics_summary"
+            android:defaultValue="true" />
+    </PreferenceCategory>
+
+    <com.android.settingslib.widget.FooterPreference
+        android:key="miraclo_island_footer"
+        android:title="@string/miraclo_island_footer"
+        android:selectable="false"
+        settings:searchable="false" />
+</PreferenceScreen>

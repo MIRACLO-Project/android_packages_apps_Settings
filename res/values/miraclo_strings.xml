@@ -23,4 +23,44 @@
         <item>0</item>
         <item>1</item>
     </string-array>
+
+    <!-- Settings > Notifications > Dynamic Island -->
+    <string name="miraclo_island_title">Dynamic Island</string>
+    <string name="miraclo_island_entry_summary">Live activities around the camera</string>
+    <string name="miraclo_island_enable_title">Use Dynamic Island</string>
+    <string name="miraclo_island_sources_title">Activities</string>
+    <string name="miraclo_island_media_title">Media</string>
+    <string name="miraclo_island_media_summary">Music and video</string>
+    <string name="miraclo_island_calls_title">Calls</string>
+    <string name="miraclo_island_calls_summary">Incoming and ongoing calls</string>
+    <string name="miraclo_island_timers_title">Timers &amp; stopwatch</string>
+    <string name="miraclo_island_timers_summary">From the Clock app</string>
+    <string name="miraclo_island_behaviour_title">Behaviour</string>
+    <string name="miraclo_island_hide_while_open_title">Hide in the app</string>
+    <string name="miraclo_island_hide_while_open_summary">Show only after you leave the app</string>
+    <string name="miraclo_island_several_title">Multiple activities</string>
+    <string name="miraclo_island_several_summary">Show up to 3 at once</string>
+    <string name="miraclo_island_touch_glow_title">Touch glow</string>
+    <string name="miraclo_island_touch_glow_summary">Soft glow under your finger</string>
+    <string name="miraclo_island_ambient_glow_title">Ambient glow</string>
+    <string name="miraclo_island_ambient_glow_summary">Glow in the album or app colour</string>
+    <string name="miraclo_island_haptics_title">Haptics</string>
+    <string name="miraclo_island_haptics_summary">Light tap when it opens and closes</string>
+    <string name="miraclo_island_paused_timeout_title">Hide paused music</string>
+    <string name="miraclo_island_paused_timeout_summary">After 10 minutes paused</string>
+    <string name="miraclo_island_screen_record_title">Screen recording</string>
+    <string name="miraclo_island_screen_record_summary">Countdown, timer and Stop</string>
+    <string name="miraclo_island_live_title">Live updates</string>
+    <string name="miraclo_island_live_summary">Navigation, rides and deliveries</string>
+    <string name="miraclo_island_progress_title">Downloads &amp; transfers</string>
+    <string name="miraclo_island_progress_summary">Downloads, Quick Share and recordings</string>
+    <string name="miraclo_island_charging_title">Charging</string>
+    <string name="miraclo_island_charging_summary">Battery level when plugged in</string>
+    <string name="miraclo_island_earbuds_title">Earbuds</string>
+    <string name="miraclo_island_earbuds_summary">Battery level when connected</string>
+    <string name="miraclo_island_ringer_title">Ringer mode</string>
+    <string name="miraclo_island_ringer_summary">Ring, vibrate or silent</string>
+    <string name="miraclo_island_low_battery_title">Low battery</string>
+    <string name="miraclo_island_low_battery_summary">Alerts at 20% and 10%</string>
+    <string name="miraclo_island_footer">Hidden on the lock screen and in full-screen apps.</string>
 </resources>
