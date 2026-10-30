@@ -65,6 +65,13 @@
             android:entryValues="@array/miraclo_qs_style_values"
             android:summary="@string/miraclo_qs_style_summary"
             android:defaultValue="0" />
+
+        <!-- Liquid Glass: a page to choose where SystemUI uses it -->
+        <Preference
+            android:key="miraclo_liquid_glass_settings"
+            android:title="@string/miraclo_liquid_glass_title"
+            android:summary="@string/miraclo_liquid_glass_summary"
+            android:fragment="com.android.settings.display.MiraCLOLiquidGlassSettings" />
     </PreferenceCategory>
 
     <PreferenceCategory

@@ -74,4 +74,28 @@
     <string name="miraclo_maintainer_name" translatable="false">PSP</string>
     <string name="miraclo_about_update">Update</string>
     <string name="miraclo_about_no_updates">Updates are coming in a later build</string>
+
+    <!-- Settings > Display > Liquid Glass -->
+    <string name="miraclo_liquid_glass_title">Liquid Glass</string>
+    <string name="miraclo_liquid_glass_summary">Choose where glass is used</string>
+    <string name="miraclo_liquid_glass_main_title">Use Liquid Glass</string>
+    <string name="miraclo_liquid_glass_places_title">Apply to</string>
+    <string name="miraclo_lg_qs_title">Quick Settings</string>
+    <string name="miraclo_lg_qs_summary">Tiles, sliders and music card</string>
+    <string name="miraclo_lg_notifications_title">Notifications</string>
+    <string name="miraclo_lg_notifications_summary">Notification cards in the shade</string>
+    <string name="miraclo_lg_island_title">Island cards</string>
+    <string name="miraclo_lg_island_summary">Expanded island cards</string>
+    <string name="miraclo_lg_island_pills_title">Island pills</string>
+    <string name="miraclo_lg_island_pills_summary">Small pills beside the camera</string>
+    <string name="miraclo_lg_volume_title">Volume panel</string>
+    <string name="miraclo_lg_volume_summary">MiraCLO volume panel</string>
+    <string name="miraclo_lg_power_title">Power menu</string>
+    <string name="miraclo_lg_power_summary">Power button menu</string>
+    <string name="miraclo_lg_look_title">Look</string>
+    <string name="miraclo_lg_refraction_title">Refraction (experimental)</string>
+    <string name="miraclo_lg_refraction_summary">Bends what\'s behind the glass at its edges. Quick Settings and the island, always dark</string>
+    <string name="miraclo_lg_glow_title">Glow</string>
+    <string name="miraclo_lg_glow_summary">A soft light under your finger in Quick Settings and the island, and on the music card</string>
+    <string name="miraclo_liquid_glass_footer">The lock screen and pop-up notifications stay solid for readability.</string>
 </resources>
