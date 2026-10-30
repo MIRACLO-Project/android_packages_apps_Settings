@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     SPDX-FileCopyrightText: MiraCLO
+     SPDX-License-Identifier: Apache-2.0
+-->
+<!-- MiraCLO: the banner at the top of Settings > About phone (MiraCLOAboutBannerView). -->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <com.android.settings.deviceinfo.MiraCLOAboutBannerView
+        android:id="@+id/miraclo_about_banner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:importantForAccessibility="yes"
+        android:focusable="true" />
+</FrameLayout>

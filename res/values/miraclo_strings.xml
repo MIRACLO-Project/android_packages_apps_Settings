@@ -67,4 +67,11 @@
     <!-- Settings > Sound & vibration -->
     <string name="miraclo_volume_panel_title">MiraCLO volume panel</string>
     <string name="miraclo_volume_panel_summary">Compact edge panel. Turn off for the Android panel</string>
+
+    <!-- About phone -->
+    <string name="miraclo_android_version_title">MiraCLO version</string>
+    <string name="miraclo_about_maintainer_title">Maintainer</string>
+    <string name="miraclo_maintainer_name" translatable="false">PSP</string>
+    <string name="miraclo_about_update">Update</string>
+    <string name="miraclo_about_no_updates">Updates are coming in a later build</string>
 </resources>
