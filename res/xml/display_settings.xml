@@ -66,6 +66,14 @@
             android:summary="@string/miraclo_qs_style_summary"
             android:defaultValue="0" />
 
+        <!-- MiraCLO split shade: left side for notifications, right side for Quick Settings
+             (Settings.Secure "miraclo_split_shade") -->
+        <com.android.settings.miraclo.SecureSettingSwitchPreference
+            android:key="miraclo_split_shade"
+            android:title="@string/miraclo_split_shade_title"
+            android:summary="@string/miraclo_split_shade_summary"
+            android:defaultValue="false" />
+
         <!-- Liquid Glass: a page to choose where SystemUI uses it -->
         <Preference
             android:key="miraclo_liquid_glass_settings"
