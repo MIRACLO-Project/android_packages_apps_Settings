@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     SPDX-FileCopyrightText: MiraCLO
+     SPDX-License-Identifier: Apache-2.0
+
+     Mira Studio: the feature cards, two per row.
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingStart="16dp"
+    android:paddingEnd="16dp"
+    android:paddingBottom="24dp">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp"
+        android:paddingBottom="2dp"
+        android:text="@string/miraclo_studio_summary"
+        android:textColor="@color/miraclo_studio_sub"
+        android:textSize="15sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:orientation="horizontal">
+
+        <include
+            android:id="@+id/miraclo_card_qs"
+            layout="@layout/miraclo_studio_card" />
+
+        <Space
+            android:layout_width="12dp"
+            android:layout_height="1dp" />
+
+        <include
+            android:id="@+id/miraclo_card_glass"
+            layout="@layout/miraclo_studio_card" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:orientation="horizontal">
+
+        <include
+            android:id="@+id/miraclo_card_island"
+            layout="@layout/miraclo_studio_card" />
+
+        <Space
+            android:layout_width="12dp"
+            android:layout_height="1dp" />
+
+        <include
+            android:id="@+id/miraclo_card_volume"
+            layout="@layout/miraclo_studio_card" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:orientation="horizontal">
+
+        <include
+            android:id="@+id/miraclo_card_shade"
+            layout="@layout/miraclo_studio_card" />
+
+        <Space
+            android:layout_width="12dp"
+            android:layout_height="1dp" />
+
+        <include
+            android:id="@+id/miraclo_card_home"
+            layout="@layout/miraclo_studio_card" />
+    </LinearLayout>
+</LinearLayout>

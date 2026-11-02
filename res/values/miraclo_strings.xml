@@ -4,39 +4,46 @@
      SPDX-License-Identifier: Apache-2.0
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <!-- Settings > Display: the Quick Settings and shade category -->
-    <string name="miraclo_qs_category_title">Quick Settings</string>
+    <!-- Mira Studio: everything MiraCLO adds, at the top of Settings -->
+    <string name="miraclo_studio_title">Mira Studio</string>
+    <string name="miraclo_studio_banner_summary">Quick Settings, Liquid Glass, Dynamic Island and more</string>
+    <string name="miraclo_studio_summary">Everything MiraCLO adds on top of Android, in one place.</string>
+    <string name="miraclo_studio_style">Style</string>
 
-    <!-- Quick Settings: layout style chooser (Settings > Display > Quick Settings) -->
-    <string name="miraclo_qs_style_title">Quick Settings style</string>
-    <string name="miraclo_qs_style_default">Default</string>
+    <string name="miraclo_studio_qs_title">Quick Settings</string>
+    <string name="miraclo_studio_qs_summary">ColorOS, One UI, iOS, Stock</string>
+    <string name="miraclo_studio_qs_intro">Pick a look for the quick settings panel.</string>
+    <string name="miraclo_qs_style_default">Stock</string>
     <string name="miraclo_qs_style_coloros">ColorOS</string>
-    <string name="miraclo_qs_style_ios">iOS style</string>
-    <string name="miraclo_qs_style_nothing">Nothing style</string>
-    <string name="miraclo_qs_style_oneui">One UI style</string>
-    <string name="miraclo_qs_style_summary">%s. In Quick Settings, tap Edit controls to move, resize, add or remove anything</string>
+    <string name="miraclo_qs_style_ios">iOS</string>
+    <string name="miraclo_qs_style_oneui">One UI</string>
+    <string name="miraclo_studio_round_title">Round tiles</string>
+    <string name="miraclo_studio_round_summary">Small tiles become circles, large tiles become pills</string>
+    <string name="miraclo_studio_size_title">Tile size</string>
+    <string name="miraclo_studio_edit_title">Edit controls</string>
+    <string name="miraclo_studio_edit_summary">Move, resize and remove tiles and widgets</string>
 
-    <string-array name="miraclo_qs_style_entries" translatable="false">
-        <item>@string/miraclo_qs_style_default</item>
-        <item>@string/miraclo_qs_style_coloros</item>
-        <item>@string/miraclo_qs_style_ios</item>
-        <item>@string/miraclo_qs_style_nothing</item>
-        <item>@string/miraclo_qs_style_oneui</item>
-    </string-array>
+    <string name="miraclo_studio_glass_summary">Glass, refraction, glow</string>
+    <string name="miraclo_studio_island_summary">Music, charging, calls</string>
 
-    <!-- Stored in Settings.Secure "miraclo_qs_style"; SystemUI reads 0 = Default, 1 = ColorOS,
-         2 = iOS style, 3 = Nothing style, 4 = One UI style -->
-    <string-array name="miraclo_qs_style_values" translatable="false">
-        <item>0</item>
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-        <item>4</item>
-    </string-array>
+    <string name="miraclo_studio_volume_title">Volume panel</string>
+    <string name="miraclo_studio_volume_summary">Style</string>
+    <string name="miraclo_studio_volume_intro">The panel that appears when you press the volume keys.</string>
 
-    <!-- Settings > Display > Quick Settings: shade options -->
-    <string name="miraclo_split_shade_title">Split shade</string>
-    <string name="miraclo_split_shade_summary">Swipe down on the left for notifications, on the right for Quick Settings</string>
+    <string name="miraclo_studio_shade_title">Notification shade</string>
+    <string name="miraclo_studio_shade_summary">Split pull, sides</string>
+    <string name="miraclo_studio_shade_intro">Pull from the left for notifications, from the right for Quick Settings.</string>
+    <string name="miraclo_studio_swap_title">Quick Settings on the left</string>
+    <string name="miraclo_studio_swap_summary">Swap the two sides of the top edge</string>
+    <string name="miraclo_studio_shade_footer">The split shade is always on in MiraCLO.</string>
+
+    <string name="miraclo_studio_home_title">Home and recents</string>
+    <string name="miraclo_studio_home_summary">Recents stack, icon packs</string>
+    <string name="miraclo_studio_home_intro">Options that live in the MiraCLO launcher.</string>
+    <string name="miraclo_studio_recents_title">Recents style</string>
+    <string name="miraclo_studio_recents_summary">ColorOS stack or default, in Home settings</string>
+    <string name="miraclo_studio_icons_title">Icon packs</string>
+    <string name="miraclo_studio_icons_summary">Home screen and app drawer packs, in Home settings</string>
 
     <!-- Settings > Notifications > Dynamic Island -->
     <string name="miraclo_island_title">Dynamic Island</string>

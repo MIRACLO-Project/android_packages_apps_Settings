@@ -44,4 +44,14 @@ public final class SecureSettingsDataStore extends PreferenceDataStore {
     public void putString(String key, @Nullable String value) {
         Settings.Secure.putString(mResolver, key, value);
     }
+
+    @Override
+    public int getInt(String key, int defValue) {
+        return Settings.Secure.getInt(mResolver, key, defValue);
+    }
+
+    @Override
+    public void putInt(String key, int value) {
+        Settings.Secure.putInt(mResolver, key, value);
+    }
 }

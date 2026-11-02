@@ -164,14 +164,6 @@
         android:title="@string/sound_audio_category_title">
         <!-- Live Caption -110 and Now Playing -105-->
 
-        <!-- MiraCLO: One UI style volume panel (read by SystemUI) -->
-        <com.android.settings.miraclo.SecureSettingSwitchPreference
-            android:key="miraclo_volume_panel"
-            android:title="@string/miraclo_volume_panel_title"
-            android:summary="@string/miraclo_volume_panel_summary"
-            android:defaultValue="true"
-            android:order="-114"/>
-
         <!-- Spatial audio -->
         <Preference
             android:key="spatial_audio_summary"

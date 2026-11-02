@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     SPDX-FileCopyrightText: MiraCLO
+     SPDX-License-Identifier: Apache-2.0
+
+     Mira Studio > Volume panel.
+-->
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:key="miraclo_studio_volume"
+    android:title="@string/miraclo_studio_volume_title">
+
+    <com.android.settingslib.widget.TopIntroPreference
+        android:key="miraclo_volume_intro"
+        android:title="@string/miraclo_studio_volume_intro" />
+
+    <com.android.settings.miraclo.SecureSettingSwitchPreference
+        android:key="miraclo_volume_panel"
+        android:title="@string/miraclo_volume_panel_title"
+        android:summary="@string/miraclo_volume_panel_summary"
+        android:defaultValue="true" />
+</PreferenceScreen>

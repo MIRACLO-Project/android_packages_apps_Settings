@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     SPDX-FileCopyrightText: MiraCLO
+     SPDX-License-Identifier: Apache-2.0
+-->
+<resources>
+    <!-- Mira Studio, light theme -->
+    <color name="miraclo_studio_card">#FFEEF0F7</color>
+    <color name="miraclo_studio_banner">#FFDBE4FB</color>
+    <color name="miraclo_studio_title">#FF1A1C22</color>
+    <color name="miraclo_studio_sub">#FF5A5D66</color>
+    <color name="miraclo_studio_banner_sub">#FF3B4A6E</color>
+    <color name="miraclo_studio_accent">#FF3A5F9E</color>
+</resources>

@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     SPDX-FileCopyrightText: MiraCLO
+     SPDX-License-Identifier: Apache-2.0
+
+     Settings home: the Mira Studio entry under the search bar.
+-->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingStart="16dp"
+    android:paddingEnd="16dp"
+    android:paddingTop="4dp"
+    android:paddingBottom="12dp">
+
+    <LinearLayout
+        android:id="@+id/miraclo_studio_banner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@drawable/miraclo_studio_banner_bg"
+        android:duplicateParentState="true"
+        android:padding="18dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="74dp"
+            android:orientation="horizontal"
+            android:importantForAccessibility="noHideDescendants">
+
+            <com.android.settings.miraclo.studio.MiraStudioArtView
+                android:id="@+id/miraclo_banner_art1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
+
+            <com.android.settings.miraclo.studio.MiraStudioArtView
+                android:id="@+id/miraclo_banner_art2"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_marginStart="8dp" />
+
+            <com.android.settings.miraclo.studio.MiraStudioArtView
+                android:id="@+id/miraclo_banner_art3"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_marginStart="8dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/miraclo_studio_title"
+                    android:textColor="@color/miraclo_studio_title"
+                    android:textSize="20sp"
+                    android:fontFamily="sans-serif-medium" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:text="@string/miraclo_studio_banner_summary"
+                    android:textColor="@color/miraclo_studio_banner_sub"
+                    android:textSize="14sp" />
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:src="@drawable/miraclo_about_chevron"
+                android:importantForAccessibility="no" />
+        </LinearLayout>
+    </LinearLayout>
+</FrameLayout>

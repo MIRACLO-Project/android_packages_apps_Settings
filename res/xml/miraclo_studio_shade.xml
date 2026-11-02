@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     SPDX-FileCopyrightText: MiraCLO
+     SPDX-License-Identifier: Apache-2.0
+
+     Mira Studio > Notification shade (Settings.Secure, read by SystemUI).
+-->
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:settings="http://schemas.android.com/apk/res-auto"
+    android:key="miraclo_studio_shade"
+    android:title="@string/miraclo_studio_shade_title">
+
+    <com.android.settingslib.widget.TopIntroPreference
+        android:key="miraclo_shade_intro"
+        android:title="@string/miraclo_studio_shade_intro" />
+
+    <com.android.settings.miraclo.SecureSettingSwitchPreference
+        android:key="miraclo_split_shade_swap"
+        android:title="@string/miraclo_studio_swap_title"
+        android:summary="@string/miraclo_studio_swap_summary"
+        android:defaultValue="false" />
+
+    <com.android.settingslib.widget.FooterPreference
+        android:key="miraclo_shade_footer"
+        android:title="@string/miraclo_studio_shade_footer"
+        android:selectable="false" />
+</PreferenceScreen>

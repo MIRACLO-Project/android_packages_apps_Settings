@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     SPDX-FileCopyrightText: MiraCLO
+     SPDX-License-Identifier: Apache-2.0
+
+     Mira Studio: one feature card (illustration, title, summary).
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:layout_weight="1"
+    android:orientation="vertical"
+    android:background="@drawable/miraclo_studio_card_bg"
+    android:clickable="true"
+    android:focusable="true"
+    android:paddingStart="10dp"
+    android:paddingEnd="10dp"
+    android:paddingTop="10dp"
+    android:paddingBottom="14dp">
+
+    <com.android.settings.miraclo.studio.MiraStudioArtView
+        android:id="@+id/miraclo_card_art"
+        android:layout_width="match_parent"
+        android:layout_height="112dp"
+        android:importantForAccessibility="no" />
+
+    <TextView
+        android:id="@+id/miraclo_card_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:paddingStart="4dp"
+        android:paddingEnd="4dp"
+        android:textColor="@color/miraclo_studio_title"
+        android:textSize="16sp"
+        android:fontFamily="sans-serif-medium" />
+
+    <TextView
+        android:id="@+id/miraclo_card_summary"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:paddingStart="4dp"
+        android:paddingEnd="4dp"
+        android:textColor="@color/miraclo_studio_sub"
+        android:textSize="13sp" />
+</LinearLayout>

@@ -52,36 +52,6 @@
 
     </PreferenceCategory>
 
-    <!-- MiraCLO: Quick Settings and shade options (Settings.Secure, read by SystemUI) -->
-    <PreferenceCategory
-        android:key="miraclo_category_quick_settings"
-        android:title="@string/miraclo_qs_category_title"
-        android:order="-195">
-
-        <com.android.settings.miraclo.SecureSettingListPreference
-            android:key="miraclo_qs_style"
-            android:title="@string/miraclo_qs_style_title"
-            android:entries="@array/miraclo_qs_style_entries"
-            android:entryValues="@array/miraclo_qs_style_values"
-            android:summary="@string/miraclo_qs_style_summary"
-            android:defaultValue="0" />
-
-        <!-- MiraCLO split shade: left side for notifications, right side for Quick Settings
-             (Settings.Secure "miraclo_split_shade") -->
-        <com.android.settings.miraclo.SecureSettingSwitchPreference
-            android:key="miraclo_split_shade"
-            android:title="@string/miraclo_split_shade_title"
-            android:summary="@string/miraclo_split_shade_summary"
-            android:defaultValue="false" />
-
-        <!-- Liquid Glass: a page to choose where SystemUI uses it -->
-        <Preference
-            android:key="miraclo_liquid_glass_settings"
-            android:title="@string/miraclo_liquid_glass_title"
-            android:summary="@string/miraclo_liquid_glass_summary"
-            android:fragment="com.android.settings.display.MiraCLOLiquidGlassSettings" />
-    </PreferenceCategory>
-
     <PreferenceCategory
         android:key="category_lock_display"
         android:title="@string/category_name_lock_display"

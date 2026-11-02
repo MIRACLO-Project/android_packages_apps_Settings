@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     SPDX-FileCopyrightText: MiraCLO
+     SPDX-License-Identifier: Apache-2.0
+
+     Mira Studio > Quick Settings (Settings.Secure, read by SystemUI).
+-->
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:settings="http://schemas.android.com/apk/res-auto"
+    android:key="miraclo_studio_qs"
+    android:title="@string/miraclo_studio_qs_title">
+
+    <com.android.settingslib.widget.TopIntroPreference
+        android:key="miraclo_qs_intro"
+        android:title="@string/miraclo_studio_qs_intro" />
+
+    <PreferenceCategory
+        android:key="miraclo_qs_style_category"
+        android:title="@string/miraclo_studio_style">
+
+        <com.android.settings.miraclo.studio.MiraStudioQsStylePreference
+            android:key="miraclo_qs_styles" />
+    </PreferenceCategory>
+
+    <!-- Stock only: shown when the Stock style is picked -->
+    <com.android.settings.miraclo.SecureSettingSwitchPreference
+        android:key="miraclo_qs_round_tiles"
+        android:title="@string/miraclo_studio_round_title"
+        android:summary="@string/miraclo_studio_round_summary"
+        android:defaultValue="false" />
+
+    <com.android.settings.miraclo.SecureSettingSliderPreference
+        android:key="miraclo_qs_tile_size"
+        android:title="@string/miraclo_studio_size_title"
+        android:max="88"
+        android:defaultValue="72"
+        settings:min="56"
+        settings:seekBarIncrement="4" />
+
+    <Preference
+        android:key="miraclo_qs_edit_controls"
+        android:title="@string/miraclo_studio_edit_title"
+        android:summary="@string/miraclo_studio_edit_summary" />
+</PreferenceScreen>
