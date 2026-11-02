@@ -110,7 +110,11 @@ public class AccountDashboardFragment extends DashboardFragment {
             cmpp.init(this, getFragmentManager(), getIntent(), delegate,
                     /*isWorkProfile=*/false, /*isPrivateSpace=*/ false);
         } else {
-            getSettingsLifecycle().addObserver(use(PasswordsPreferenceController.class));
+            final PasswordsPreferenceController passwords =
+                    use(PasswordsPreferenceController.class);
+            if (passwords != null) {
+                getSettingsLifecycle().addObserver(passwords);
+            }
         }
     }
 
