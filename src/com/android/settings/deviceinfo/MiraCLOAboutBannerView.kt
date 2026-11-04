@@ -38,6 +38,7 @@ import com.android.settings.R
 import java.util.Locale
 import java.util.concurrent.Executors
 import kotlin.math.max
+import kotlin.math.min
 
 /**
  * MiraCLO: the banner at the top of Settings > About phone, in the ColorOS layout.
@@ -243,16 +244,19 @@ class MiraCLOAboutBannerView @JvmOverloads constructor(
         canvas.restore()
     }
 
+    // The MiraCLO wordmark (Orbit), drawn from its vector: its O is the mark with the blue star.
+    private val wordmark: Drawable? = context.getDrawable(R.drawable.miraclo_wordmark)?.mutate()
+
     private fun drawName(canvas: Canvas, base: Float, alpha: Int) {
-        val mira = "Mira"
-        val clo = "CLO"
-        val x = card.centerX() - namePaint.measureText(NAME) / 2f
-        namePaint.color = BRAND_WHITE
-        namePaint.alpha = alpha
-        canvas.drawText(mira, x, base, namePaint)
-        namePaint.color = BRAND_BLUE
-        namePaint.alpha = alpha
-        canvas.drawText(clo, x + namePaint.measureText(mira), base, namePaint)
+        val d = wordmark ?: return
+        // As wide as the old text name, capped at 62% of the card; sits on the same baseline.
+        val w = min(card.width() * 0.62f, namePaint.measureText(NAME) * 1.05f)
+        val h = w * d.intrinsicHeight / d.intrinsicWidth
+        val left = card.centerX() - w / 2f
+        val top = base - h * (108f / 116f)
+        d.setBounds(left.toInt(), top.toInt(), (left + w).toInt(), (top + h).toInt())
+        d.alpha = alpha
+        d.draw(canvas)
     }
 
     private fun drawVersionLine(canvas: Canvas, base: Float, alpha: Int) {
@@ -379,7 +383,6 @@ class MiraCLOAboutBannerView @JvmOverloads constructor(
         private const val NAME = "MiraCLO"
         /** MiraCLO brand colours (wordmark): marble white and CLO blue. */
         private const val BRAND_WHITE = 0xFFEEF3FA.toInt()
-        private const val BRAND_BLUE = 0xFF7E99FF.toInt()
         /** Action the MiraCLO updater will answer; until it exists, the system one is used. */
         const val ACTION_MIRACLO_UPDATES = "com.miraclo.action.CHECK_UPDATES"
         private const val SIDE = 16f

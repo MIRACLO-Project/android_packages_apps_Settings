@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     SPDX-FileCopyrightText: MiraCLO
+     SPDX-License-Identifier: Apache-2.0
+
+     The MiraCLO wordmark (Orbit): one stroke weight, round ends; its O is the mark, with
+     the blue star in the gap. Drawn, not set in a font.
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="283.6dp"
+    android:height="46.4dp"
+    android:viewportWidth="709.0"
+    android:viewportHeight="116">
+    <path
+        android:pathData="M 8.00 108.00 L 8.00 8.00 L 63.00 74.00 L 118.00 8.00 L 118.00 108.00 M 152.00 8.00 L 152.00 108.00 M 186.00 108.00 L 186.00 8.00 L 226.00 8.00 M 226.00 8.00 A 26.00 26.00 0 0 1 226.00 60.00 M 226.00 60.00 L 186.00 60.00 M 222.00 60.00 L 264.00 108.00 M 279.00 108.00 L 325.00 8.00 L 371.00 108.00 M 483.16 91.46 A 50.00 50.00 0 1 1 483.16 24.54 M 521.00 8.00 L 521.00 108.00 L 587.00 108.00 M 696.32 36.87 A 50.00 50.00 0 1 1 672.13 12.68"
+        android:strokeColor="#FFE8EEFF"
+        android:strokeWidth="11"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round" />
+    <path
+        android:pathData="M 677.36 22.64 a 9 9 0 1 0 18 0 a 9 9 0 1 0 -18 0 Z"
+        android:fillColor="#FF4D8BFF" />
+</vector>

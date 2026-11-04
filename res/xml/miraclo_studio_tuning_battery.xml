@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     SPDX-FileCopyrightText: MiraCLO
+     SPDX-License-Identifier: Apache-2.0
+-->
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:key="miraclo_studio_tuning_battery"
+    android:title="@string/miraclo_tuning_battery">
+
+    <com.android.settings.miraclo.studio.MiraStudioBatteryTuningPreference
+        android:key="miraclo_studio_tuning_battery_content" />
+</PreferenceScreen>

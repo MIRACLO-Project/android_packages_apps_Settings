@@ -10,9 +10,8 @@ import android.util.AttributeSet;
 
 import androidx.preference.ListPreference;
 
-/** A list whose chosen entry value lives in Settings.Secure under its key. */
+/** A ListPreference stored in Settings.Secure (read live by SystemUI). */
 public class SecureSettingListPreference extends ListPreference {
-
     public SecureSettingListPreference(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init(context);

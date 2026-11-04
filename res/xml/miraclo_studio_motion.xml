@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     SPDX-FileCopyrightText: MiraCLO
+     SPDX-License-Identifier: Apache-2.0
+-->
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:key="miraclo_studio_motion"
+    android:title="@string/miraclo_style_motion">
+
+    <com.android.settings.miraclo.studio.MiraStudioMotionPreference
+        android:key="miraclo_studio_motion_content" />
+</PreferenceScreen>

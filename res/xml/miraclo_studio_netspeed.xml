@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     SPDX-FileCopyrightText: MiraCLO
+     SPDX-License-Identifier: Apache-2.0
+-->
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:key="miraclo_studio_netspeed"
+    android:title="@string/miraclo_speed_title">
+
+    <PreferenceCategory android:key="miraclo_speed_show" android:title="@string/miraclo_speed_show">
+        <com.android.settings.miraclo.SecureSettingSwitchPreference
+            android:key="miraclo_sb_speed"
+            android:title="@string/miraclo_speed_title"
+            
+            android:defaultValue="false" />
+        <com.android.settings.miraclo.SecureSettingSwitchPreference
+            android:key="miraclo_sb_speed_hide_idle"
+            android:title="@string/miraclo_speed_idle"
+            android:summary="@string/miraclo_speed_idle_sum"
+            android:defaultValue="false" />
+    </PreferenceCategory>
+
+    <PreferenceCategory android:key="miraclo_speed_look" android:title="@string/miraclo_speed_look">
+        <com.android.settings.miraclo.SecureSettingListPreference
+            android:key="miraclo_sb_speed_pos"
+            android:title="@string/miraclo_speed_pos"
+            android:entries="@array/miraclo_speed_pos_e"
+            android:entryValues="@array/miraclo_v2"
+            android:defaultValue="1"
+            android:summary="%s" />
+        <com.android.settings.miraclo.SecureSettingListPreference
+            android:key="miraclo_sb_speed_style"
+            android:title="@string/miraclo_speed_style"
+            android:entries="@array/miraclo_speed_style_e"
+            android:entryValues="@array/miraclo_v3"
+            android:defaultValue="0"
+            android:summary="%s" />
+        <com.android.settings.miraclo.SecureSettingSwitchPreference
+            android:key="miraclo_sb_speed_arrows"
+            android:title="@string/miraclo_speed_arrows"
+            
+            android:defaultValue="false" />
+        <com.android.settings.miraclo.SecureSettingListPreference
+            android:key="miraclo_sb_speed_size"
+            android:title="@string/miraclo_speed_size"
+            android:entries="@array/miraclo_speed_size_e"
+            android:entryValues="@array/miraclo_v3"
+            android:defaultValue="1"
+            android:summary="%s" />
+        <com.android.settings.miraclo.SecureSettingListPreference
+            android:key="miraclo_sb_speed_unit"
+            android:title="@string/miraclo_speed_unit"
+            android:entries="@array/miraclo_speed_unit_e"
+            android:entryValues="@array/miraclo_v3"
+            android:defaultValue="0"
+            android:summary="%s" />
+    </PreferenceCategory>
+</PreferenceScreen>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     SPDX-FileCopyrightText: MiraCLO
+     SPDX-License-Identifier: Apache-2.0
+
+     Mira Studio > Colours &amp; style: the ROM-wide Material You picker.
+-->
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:key="miraclo_studio_colors"
+    android:title="@string/miraclo_studio_colors_title">
+
+    <com.android.settings.miraclo.studio.MiraStudioColorsPreference
+        android:key="miraclo_studio_colors_content" />
+</PreferenceScreen>

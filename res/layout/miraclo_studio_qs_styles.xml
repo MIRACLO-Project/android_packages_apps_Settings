@@ -3,7 +3,7 @@
      SPDX-FileCopyrightText: MiraCLO
      SPDX-License-Identifier: Apache-2.0
 
-     Mira Studio > Quick Settings: the style picker, two thumbnails per row.
+     Mira Studio > Quick Settings: the style picker, two thumbnails per row: Stock, ColorOS, iOS, One UI.
 -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
@@ -18,6 +18,40 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
         android:orientation="horizontal">
+
+        <LinearLayout
+            android:id="@+id/miraclo_qs_card_stock"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:background="@drawable/miraclo_studio_card_bg"
+            android:clickable="true"
+            android:focusable="true"
+            android:padding="8dp">
+
+            <com.android.settings.miraclo.studio.MiraStudioArtView
+                android:id="@+id/miraclo_qs_art_stock"
+                android:layout_width="match_parent"
+                android:layout_height="120dp"
+                android:importantForAccessibility="no" />
+
+            <RadioButton
+                android:id="@+id/miraclo_qs_radio_stock"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="6dp"
+                android:clickable="false"
+                android:focusable="false"
+                android:textColor="@color/miraclo_studio_title"
+                android:textSize="15sp"
+                android:fontFamily="sans-serif-medium" />
+        </LinearLayout>
+
+        <Space
+            android:layout_width="12dp"
+            android:layout_height="1dp" />
 
         <LinearLayout
             android:id="@+id/miraclo_qs_card_coloros"
@@ -38,40 +72,6 @@
 
             <RadioButton
                 android:id="@+id/miraclo_qs_radio_coloros"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="6dp"
-                android:clickable="false"
-                android:focusable="false"
-                android:textColor="@color/miraclo_studio_title"
-                android:textSize="15sp"
-                android:fontFamily="sans-serif-medium" />
-        </LinearLayout>
-
-        <Space
-            android:layout_width="12dp"
-            android:layout_height="1dp" />
-
-        <LinearLayout
-            android:id="@+id/miraclo_qs_card_oneui"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical"
-            android:background="@drawable/miraclo_studio_card_bg"
-            android:clickable="true"
-            android:focusable="true"
-            android:padding="8dp">
-
-            <com.android.settings.miraclo.studio.MiraStudioArtView
-                android:id="@+id/miraclo_qs_art_oneui"
-                android:layout_width="match_parent"
-                android:layout_height="120dp"
-                android:importantForAccessibility="no" />
-
-            <RadioButton
-                android:id="@+id/miraclo_qs_radio_oneui"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
@@ -125,7 +125,7 @@
             android:layout_height="1dp" />
 
         <LinearLayout
-            android:id="@+id/miraclo_qs_card_stock"
+            android:id="@+id/miraclo_qs_card_oneui"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -136,13 +136,13 @@
             android:padding="8dp">
 
             <com.android.settings.miraclo.studio.MiraStudioArtView
-                android:id="@+id/miraclo_qs_art_stock"
+                android:id="@+id/miraclo_qs_art_oneui"
                 android:layout_width="match_parent"
                 android:layout_height="120dp"
                 android:importantForAccessibility="no" />
 
             <RadioButton
-                android:id="@+id/miraclo_qs_radio_stock"
+                android:id="@+id/miraclo_qs_radio_oneui"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"

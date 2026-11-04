@@ -34,11 +34,14 @@ SPDX-License-Identifier: BSD-3-Clause-Clear -->
         android:name="com.android.settings.USE_BIOMETRIC_PROVIDER"
         android:protectionLevel="signature|privileged"/>
 
+    <!-- MiraCLO: Mira Studio sets the launcher's icon shape, grid and themed icons -->
+    <uses-permission android:name="com.android.launcher3.permission.GRID_CONTROL" />
     <uses-permission android:name="android.permission.REQUEST_NETWORK_SCORES" />
     <uses-permission android:name="android.permission.WRITE_MEDIA_STORAGE" />
     <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
     <!-- MiraCLO: About phone banner shows the wallpaper -->
     <uses-permission android:name="android.permission.READ_WALLPAPER_INTERNAL" />
+    <uses-permission android:name="android.permission.SET_WALLPAPER" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
     <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />

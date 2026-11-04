@@ -3,33 +3,13 @@
      SPDX-FileCopyrightText: MiraCLO
      SPDX-License-Identifier: Apache-2.0
 
-     Mira Studio > Home and recents: these options live in the launcher, so each row opens
-     Home settings.
+     Mira Studio > Home screen &amp; icons: preview, icon shape, grid, themed icons (talks to the launcher).
 -->
 <PreferenceScreen
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:key="miraclo_studio_home"
     android:title="@string/miraclo_studio_home_title">
 
-    <com.android.settingslib.widget.TopIntroPreference
-        android:key="miraclo_home_intro"
-        android:title="@string/miraclo_studio_home_intro" />
-
-    <Preference
-        android:key="miraclo_home_recents"
-        android:title="@string/miraclo_studio_recents_title"
-        android:summary="@string/miraclo_studio_recents_summary">
-        <intent
-            android:action="android.intent.action.APPLICATION_PREFERENCES"
-            android:targetPackage="com.android.launcher3" />
-    </Preference>
-
-    <Preference
-        android:key="miraclo_home_icons"
-        android:title="@string/miraclo_studio_icons_title"
-        android:summary="@string/miraclo_studio_icons_summary">
-        <intent
-            android:action="android.intent.action.APPLICATION_PREFERENCES"
-            android:targetPackage="com.android.launcher3" />
-    </Preference>
+    <com.android.settings.miraclo.studio.MiraStudioHomeIconsPreference
+        android:key="miraclo_studio_home_content" />
 </PreferenceScreen>

@@ -22,13 +22,7 @@
         android:key="miraclo_lg_look"
         android:title="@string/miraclo_lg_look_title">
 
-        <com.android.settings.miraclo.SecureSettingSwitchPreference
-            android:key="miraclo_lg_refraction"
-            android:dependency="miraclo_liquid_glass"
-            android:title="@string/miraclo_lg_refraction_title"
-            android:summary="@string/miraclo_lg_refraction_summary"
-            android:defaultValue="false" />
-
+        <!-- Refraction is part of Liquid Glass: no switch of its own. -->
         <com.android.settings.miraclo.SecureSettingSwitchPreference
             android:key="miraclo_lg_glow"
             android:dependency="miraclo_liquid_glass"
@@ -46,42 +40,42 @@
             android:dependency="miraclo_liquid_glass"
             android:title="@string/miraclo_lg_qs_title"
             android:summary="@string/miraclo_lg_qs_summary"
-            android:defaultValue="true" />
+            android:defaultValue="false" />
 
         <com.android.settings.miraclo.SecureSettingSwitchPreference
             android:key="miraclo_lg_notifications"
             android:dependency="miraclo_liquid_glass"
             android:title="@string/miraclo_lg_notifications_title"
             android:summary="@string/miraclo_lg_notifications_summary"
-            android:defaultValue="true" />
+            android:defaultValue="false" />
 
         <com.android.settings.miraclo.SecureSettingSwitchPreference
             android:key="miraclo_lg_island"
             android:dependency="miraclo_liquid_glass"
             android:title="@string/miraclo_lg_island_title"
             android:summary="@string/miraclo_lg_island_summary"
-            android:defaultValue="true" />
+            android:defaultValue="false" />
 
         <com.android.settings.miraclo.SecureSettingSwitchPreference
             android:key="miraclo_lg_island_pills"
             android:dependency="miraclo_liquid_glass"
             android:title="@string/miraclo_lg_island_pills_title"
             android:summary="@string/miraclo_lg_island_pills_summary"
-            android:defaultValue="true" />
+            android:defaultValue="false" />
 
         <com.android.settings.miraclo.SecureSettingSwitchPreference
             android:key="miraclo_lg_volume"
             android:dependency="miraclo_liquid_glass"
             android:title="@string/miraclo_lg_volume_title"
             android:summary="@string/miraclo_lg_volume_summary"
-            android:defaultValue="true" />
+            android:defaultValue="false" />
 
         <com.android.settings.miraclo.SecureSettingSwitchPreference
             android:key="miraclo_lg_power"
             android:dependency="miraclo_liquid_glass"
             android:title="@string/miraclo_lg_power_title"
             android:summary="@string/miraclo_lg_power_summary"
-            android:defaultValue="true" />
+            android:defaultValue="false" />
     </PreferenceCategory>
 
     <com.android.settingslib.widget.FooterPreference

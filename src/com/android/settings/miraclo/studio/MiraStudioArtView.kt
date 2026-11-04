@@ -62,6 +62,8 @@ class MiraStudioArtView @JvmOverloads constructor(
         val w = width.toFloat()
         val h = height.toFloat()
         val bg = BACKGROUNDS[kind] ?: 0xFF2C3C62.toInt()
+        // Nothing is drawn outside the tile.
+        canvas.clipRect(0f, 0f, w, h)
         rr(canvas, 0f, 0f, w, h, dp(18f), bg)
         when (kind) {
             QS, BANNER_QS -> drawQs(canvas, w, h)
@@ -70,6 +72,7 @@ class MiraStudioArtView @JvmOverloads constructor(
             VOLUME -> drawVolume(canvas, w, h)
             SHADE -> drawShade(canvas, w, h)
             HOME -> drawHome(canvas, w, h)
+            COLORS -> drawColors(canvas, w, h)
             THUMB_COLOROS -> drawThumb(canvas, w, h, WHITE, glass(0.18f), true)
             THUMB_ONEUI -> drawThumb(canvas, w, h, WHITE, 0x400A1440, true)
             THUMB_IOS -> drawThumb(canvas, w, h, 0xFF0A84FF.toInt(), glass(0.18f), true)
@@ -78,21 +81,33 @@ class MiraStudioArtView @JvmOverloads constructor(
     }
 
     private fun drawQs(c: Canvas, w: Float, h: Float) {
-        val pad = dp(14f)
-        val gap = dp(6f)
-        val pill = dp(20f)
+        // Everything is sized from the view's height so the picture always fits its tile (the
+        // banner tiles are only 74dp tall).
+        val pad = minOf(dp(14f), h * 0.14f)
+        val gap = h * 0.07f
+        val pill = h * 0.22f
         val half = (w - pad * 2 - gap) / 2
         rr(c, pad, pad, pad + half, pad + pill, pill / 2, WHITE)
         rr(c, pad + half + gap, pad, w - pad, pad + pill, pill / 2, glass(0.22f))
-        val r = dp(11f)
         val cell = (w - pad * 2) / 4
+        val rows = h - pad * 2 - pill - gap
+        val r = minOf(cell * 0.38f, (rows - gap) / 4)
+        val top = pad + pill + gap
         for (row in 0..1) {
             for (col in 0..3) {
                 val on = (row == 0 && col == 1) || (row == 1 && col == 2)
-                dot(c, pad + cell * col + cell / 2, pad + pill + gap * 2 + r + row * (r * 2 + gap),
+                dot(c, pad + cell * col + cell / 2, top + r + row * (r * 2 + gap),
                     r, if (on) WHITE else glass(0.22f))
             }
         }
+    }
+
+    /** Colours & style: three overlapping palette circles. */
+    private fun drawColors(c: Canvas, w: Float, h: Float) {
+        val r = minOf(w, h) * 0.22f
+        dot(c, w * 0.38f, h * 0.42f, r, 0xFFE8A0BF.toInt())
+        dot(c, w * 0.62f, h * 0.42f, r, 0xFFA8C7FA.toInt())
+        dot(c, w * 0.50f, h * 0.64f, r, 0xFFB5E3B0.toInt())
     }
 
     private fun drawGlass(c: Canvas, w: Float, h: Float) {
@@ -209,6 +224,7 @@ class MiraStudioArtView @JvmOverloads constructor(
         const val THUMB_ONEUI = 11
         const val THUMB_IOS = 12
         const val THUMB_STOCK = 13
+        const val COLORS = 14
 
         private val WHITE = Color.WHITE
 
@@ -229,6 +245,7 @@ class MiraStudioArtView @JvmOverloads constructor(
                 THUMB_ONEUI to 0xFF3550A8.toInt(),
                 THUMB_IOS to 0xFF2A2A30.toInt(),
                 THUMB_STOCK to 0xFF1B1D24.toInt(),
+                COLORS to 0xFF2F2A40.toInt(),
             )
     }
 }

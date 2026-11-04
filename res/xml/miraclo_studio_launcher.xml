@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     SPDX-FileCopyrightText: MiraCLO
+     SPDX-License-Identifier: Apache-2.0
+
+     Mira Studio > Home screen > Launcher: labels, dots, page transition, gestures, hidden apps,
+     layout lock and folder blur (read live by the launcher).
+-->
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:key="miraclo_studio_launcher"
+    android:title="@string/miraclo_studio_launcher_title">
+
+    <com.android.settings.miraclo.studio.MiraStudioLauncherFeaturesPreference
+        android:key="miraclo_studio_launcher_content" />
+</PreferenceScreen>

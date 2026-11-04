@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     SPDX-FileCopyrightText: MiraCLO
+     SPDX-License-Identifier: Apache-2.0
+
+     Mira Studio > Home screen &amp; icons > Home search.
+-->
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:key="miraclo_studio_home_search"
+    android:title="@string/miraclo_studio_home_search_title">
+
+    <com.android.settings.miraclo.studio.MiraStudioHomeSearchPreference
+        android:key="miraclo_studio_home_search_content" />
+</PreferenceScreen>

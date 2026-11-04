@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     SPDX-FileCopyrightText: MiraCLO
+     SPDX-License-Identifier: Apache-2.0
+-->
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:key="miraclo_studio_fonts"
+    android:title="@string/miraclo_style_fonts">
+
+    <com.android.settings.miraclo.studio.MiraStudioFontsPreference
+        android:key="miraclo_studio_fonts_content" />
+</PreferenceScreen>

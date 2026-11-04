@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     SPDX-FileCopyrightText: MiraCLO
+     SPDX-License-Identifier: Apache-2.0
+-->
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:key="miraclo_studio_tuning_display"
+    android:title="@string/miraclo_tuning_display">
+
+    <com.android.settings.miraclo.studio.MiraStudioDisplayTuningPreference
+        android:key="miraclo_studio_tuning_display_content" />
+</PreferenceScreen>

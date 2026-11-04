@@ -18,5 +18,5 @@
         android:key="miraclo_volume_panel"
         android:title="@string/miraclo_volume_panel_title"
         android:summary="@string/miraclo_volume_panel_summary"
-        android:defaultValue="true" />
+        android:defaultValue="false" />
 </PreferenceScreen>
