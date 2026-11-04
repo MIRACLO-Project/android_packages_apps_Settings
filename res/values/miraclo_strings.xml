@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-     SPDX-FileCopyrightText: MiraCLO
+     SPDX-FileCopyrightText: MIRACLO
      SPDX-License-Identifier: Apache-2.0
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <!-- Mira Studio: everything MiraCLO adds, at the top of Settings -->
+    <!-- Mira Studio: everything MIRACLO adds, at the top of Settings -->
     <string name="miraclo_studio_title">Mira Studio</string>
     <string name="miraclo_studio_banner_summary">Quick Settings, Liquid Glass, Dynamic Island and more</string>
-    <string name="miraclo_studio_summary">Everything MiraCLO adds on top of Android, in one place.</string>
+    <string name="miraclo_studio_summary">Everything MIRACLO adds on top of Android, in one place.</string>
     <string name="miraclo_studio_style">Style</string>
 
     <string name="miraclo_studio_qs_title">Quick Settings</string>
@@ -35,13 +35,13 @@
     <string name="miraclo_studio_shade_intro">Pull from the left for notifications, from the right for Quick Settings.</string>
     <string name="miraclo_studio_swap_title">Quick Settings on the left</string>
     <string name="miraclo_studio_swap_summary">Swap the two sides of the top edge</string>
-    <string name="miraclo_studio_shade_footer">The split shade is always on in MiraCLO.</string>
+    <string name="miraclo_studio_shade_footer">The split shade is always on in MIRACLO.</string>
 
     <string name="miraclo_studio_home_title">Home screen &amp; icons</string>
     <string name="miraclo_studio_home_summary">Icon shapes, grid, themed icons, recents</string>
     <string name="miraclo_studio_launcher_title">Launcher</string>
     <string name="miraclo_studio_launcher_summary">Labels, page transition, gestures, hidden apps</string>
-    <string name="miraclo_studio_home_intro">Options that live in the MiraCLO launcher.</string>
+    <string name="miraclo_studio_home_intro">Options that live in the MIRACLO launcher.</string>
     <string name="miraclo_studio_recents_title">Recents style</string>
     <string name="miraclo_studio_recents_summary">ColorOS stack or default, in Home settings</string>
     <string name="miraclo_studio_icons_title">Icon packs</string>
@@ -88,11 +88,11 @@
     <string name="miraclo_island_footer">Hidden on the lock screen and in full-screen apps.</string>
 
     <!-- Settings > Sound & vibration -->
-    <string name="miraclo_volume_panel_title">MiraCLO volume panel</string>
+    <string name="miraclo_volume_panel_title">MIRACLO volume panel</string>
     <string name="miraclo_volume_panel_summary">Compact edge panel. Turn off for the Android panel</string>
 
     <!-- About phone -->
-    <string name="miraclo_android_version_title">MiraCLO version</string>
+    <string name="miraclo_android_version_title">MIRACLO version</string>
     <string name="miraclo_about_maintainer_title">Maintainer</string>
     <string name="miraclo_maintainer_name" translatable="false">PSP</string>
     <string name="miraclo_about_update">Update</string>
@@ -112,7 +112,7 @@
     <string name="miraclo_lg_island_pills_title">Island pills</string>
     <string name="miraclo_lg_island_pills_summary">Small pills beside the camera</string>
     <string name="miraclo_lg_volume_title">Volume panel</string>
-    <string name="miraclo_lg_volume_summary">MiraCLO volume panel</string>
+    <string name="miraclo_lg_volume_summary">MIRACLO volume panel</string>
     <string name="miraclo_lg_power_title">Power menu</string>
     <string name="miraclo_lg_power_summary">Power button menu</string>
     <string name="miraclo_lg_look_title">Look</string>

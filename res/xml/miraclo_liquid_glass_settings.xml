@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-     SPDX-FileCopyrightText: MiraCLO
+     SPDX-FileCopyrightText: MIRACLO
      SPDX-License-Identifier: Apache-2.0
 -->
-<!-- MiraCLO: Settings > Display > Liquid Glass. Keys are Settings.Secure values read by
+<!-- MIRACLO: Settings > Display > Liquid Glass. Keys are Settings.Secure values read by
      SystemUI (MiraCLOLiquidGlass, the quick settings and the Dynamic Island). A place is glass
      when the main switch and its own switch are both on. -->
 <PreferenceScreen

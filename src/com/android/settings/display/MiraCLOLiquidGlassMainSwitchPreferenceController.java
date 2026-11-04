@@ -1,5 +1,5 @@
 /*
- * SPDX-FileCopyrightText: MiraCLO
+ * SPDX-FileCopyrightText: MIRACLO
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -11,7 +11,7 @@ import android.provider.Settings;
 import com.android.settings.core.TogglePreferenceController;
 
 /**
- * MiraCLO: the "Use Liquid Glass" bar at the top of Settings > Display > Liquid Glass.
+ * MIRACLO: the "Use Liquid Glass" bar at the top of Settings > Display > Liquid Glass.
  * Stored in Settings.Secure "miraclo_liquid_glass" (read by SystemUI), off by default.
  */
 public class MiraCLOLiquidGlassMainSwitchPreferenceController extends TogglePreferenceController {

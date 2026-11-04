@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-     SPDX-FileCopyrightText: MiraCLO
+     SPDX-FileCopyrightText: MIRACLO
      SPDX-License-Identifier: Apache-2.0
 -->
-<!-- MiraCLO: the banner at the top of Settings > About phone (MiraCLOAboutBannerView). -->
+<!-- MIRACLO: the banner at the top of Settings > About phone (MiraCLOAboutBannerView). -->
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">

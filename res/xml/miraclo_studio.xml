@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-     SPDX-FileCopyrightText: MiraCLO
+     SPDX-FileCopyrightText: MIRACLO
      SPDX-License-Identifier: Apache-2.0
 
-     Mira Studio: everything MiraCLO adds on top of Android, as cards.
+     Mira Studio: everything MIRACLO adds on top of Android, as cards.
 -->
 <PreferenceScreen
     xmlns:android="http://schemas.android.com/apk/res/android"

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-     SPDX-FileCopyrightText: MiraCLO
+     SPDX-FileCopyrightText: MIRACLO
      SPDX-License-Identifier: Apache-2.0
 
-     The MiraCLO mark (Orbit): an open ring and the blue star in its gap. The ring follows
+     The MIRACLO mark (Orbit): an open ring and the blue star in its gap. The ring follows
      the text colour, so it reads on light and dark.
 -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"

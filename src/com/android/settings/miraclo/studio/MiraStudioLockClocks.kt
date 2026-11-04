@@ -1,5 +1,5 @@
 /*
- * SPDX-FileCopyrightText: MiraCLO
+ * SPDX-FileCopyrightText: MIRACLO
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -47,7 +47,7 @@ import com.android.settings.spa.preference.ComposePreference
 import org.json.JSONObject
 
 /**
- * Mira Studio › Top Bar › Lock Screen: the 18 MiraCLO clocks (drawn by System UI), their colour,
+ * Mira Studio › Top Bar › Lock Screen: the 18 MIRACLO clocks (drawn by System UI), their colour,
  * weight and size. Writes the same setting the wallpaper & style picker writes
  * (Settings.Secure LOCK_SCREEN_CUSTOM_CLOCK_FACE), so both stay in step.
  */

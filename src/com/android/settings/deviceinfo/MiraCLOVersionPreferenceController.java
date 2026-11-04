@@ -25,7 +25,7 @@ public class MiraCLOVersionPreferenceController extends BasePreferenceController
     }
 
     /**
-     * The MiraCLO version as shown to users, e.g. "1.0 (Aurora)" or "1.0 Beta (Aurora)".
+     * The MIRACLO version as shown to users, e.g. "1.0 (Aurora)" or "1.0 Beta (Aurora)".
      * Built from ro.miraclo.version ("1.0", or "1.0-beta" with a variant: "_" becomes a space and
      * the variant is capitalised) and ro.miraclo.codename.
      */

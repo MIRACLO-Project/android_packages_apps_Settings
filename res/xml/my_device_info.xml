@@ -27,13 +27,13 @@
         android:selectable="false"
         settings:isPreferenceVisible="false"/>
 
-    <!-- MiraCLO: banner with the user's wallpaper (MiraCLOAboutBannerView) -->
+    <!-- MIRACLO: banner with the user's wallpaper (MiraCLOAboutBannerView) -->
     <com.android.settings.deviceinfo.MiraCLOAboutBannerPreference
         android:key="miraclo_about_banner"
         android:layout="@layout/miraclo_about_banner"
         android:selectable="false"/>
 
-    <!-- MiraCLO: device name, then the maintainer, as in the ColorOS layout -->
+    <!-- MIRACLO: device name, then the maintainer, as in the ColorOS layout -->
     <PreferenceCategory
         android:key="miraclo_device_name_category"
         android:selectable="false">
@@ -75,7 +75,7 @@
             android:fragment="com.android.settings.deviceinfo.firmwareversion.FirmwareVersionSettings"
             settings:controller="com.android.settings.deviceinfo.firmwareversion.FirmwareVersionPreferenceController"/>
 
-        <!-- MiraCLO version -->
+        <!-- MIRACLO version -->
         <Preference
             android:key="miraclo_version"
             android:layout="@layout/miraclo_about_row"

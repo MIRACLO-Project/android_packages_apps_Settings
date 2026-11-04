@@ -1,5 +1,5 @@
 /*
- * SPDX-FileCopyrightText: MiraCLO
+ * SPDX-FileCopyrightText: MIRACLO
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -12,7 +12,7 @@ import com.android.settingslib.widget.LayoutPreference;
 import com.android.settingslib.widget.NormalPaddingMixin;
 
 /**
- * MiraCLO: holds the About phone banner. No card background and no side padding from the
+ * MIRACLO: holds the About phone banner. No card background and no side padding from the
  * list, so the banner lines up with the cards below it.
  */
 public class MiraCLOAboutBannerPreference extends LayoutPreference implements NormalPaddingMixin {

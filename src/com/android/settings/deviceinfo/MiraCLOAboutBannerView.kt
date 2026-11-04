@@ -1,5 +1,5 @@
 /*
- * SPDX-FileCopyrightText: MiraCLO
+ * SPDX-FileCopyrightText: MIRACLO
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -41,9 +41,9 @@ import kotlin.math.max
 import kotlin.math.min
 
 /**
- * MiraCLO: the banner at the top of Settings > About phone, in the ColorOS layout.
+ * MIRACLO: the banner at the top of Settings > About phone, in the ColorOS layout.
  *
- * A rounded card filled with the user's own wallpaper, "MiraCLO" over it, the line
+ * A rounded card filled with the user's own wallpaper, "MIRACLO" over it, the line
  * "17.0 | Aurora" (plus the release variant, if any) and an Update button (a small glass pill
  * with a soft glow) that opens the system update page. The wallpaper settles in when the page
  * opens.
@@ -64,7 +64,7 @@ class MiraCLOAboutBannerView @JvmOverloads constructor(
 
     private val bmpPaint = Paint(Paint.ANTI_ALIAS_FLAG or Paint.FILTER_BITMAP_FLAG)
     private val shade = Paint()
-    // The MiraCLO wordmark: "Mira" in marble white, "CLO" in the brand blue.
+    // The MIRACLO wordmark: "Mira" in marble white, "CLO" in the brand blue.
     private val namePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         color = BRAND_WHITE
         textAlign = Paint.Align.LEFT
@@ -145,7 +145,7 @@ class MiraCLOAboutBannerView @JvmOverloads constructor(
                         WallpaperManager.getInstance(app).getDrawable(WallpaperManager.FLAG_SYSTEM)
                     (d as? BitmapDrawable)?.bitmap ?: d?.let { drawableToBitmap(it) }
                 } catch (e: Exception) {
-                    Log.w(TAG, "No wallpaper, using the MiraCLO one", e)
+                    Log.w(TAG, "No wallpaper, using the MIRACLO one", e)
                     null
                 }
                     ?: try {
@@ -230,7 +230,7 @@ class MiraCLOAboutBannerView @JvmOverloads constructor(
         }
         canvas.drawRect(card, shade)
 
-        // MiraCLO and the version line.
+        // MIRACLO and the version line.
         val rise = dp(10f) * (1f - a)
         val textA = (255 * a).toInt().coerceIn(0, 255)
         namePaint.alpha = textA
@@ -244,7 +244,7 @@ class MiraCLOAboutBannerView @JvmOverloads constructor(
         canvas.restore()
     }
 
-    // The MiraCLO wordmark (Orbit), drawn from its vector: its O is the mark with the blue star.
+    // The MIRACLO wordmark (Orbit), drawn from its vector: its O is the mark with the blue star.
     private val wordmark: Drawable? = context.getDrawable(R.drawable.miraclo_wordmark)?.mutate()
 
     private fun drawName(canvas: Canvas, base: Float, alpha: Int) {
@@ -380,10 +380,10 @@ class MiraCLOAboutBannerView @JvmOverloads constructor(
 
     companion object {
         private const val TAG = "MiraCLOAboutBanner"
-        private const val NAME = "MiraCLO"
-        /** MiraCLO brand colours (wordmark): marble white and CLO blue. */
+        private const val NAME = "MIRACLO"
+        /** MIRACLO brand colours (wordmark): marble white and CLO blue. */
         private const val BRAND_WHITE = 0xFFEEF3FA.toInt()
-        /** Action the MiraCLO updater will answer; until it exists, the system one is used. */
+        /** Action the MIRACLO updater will answer; until it exists, the system one is used. */
         const val ACTION_MIRACLO_UPDATES = "com.miraclo.action.CHECK_UPDATES"
         private const val SIDE = 16f
         private const val TOP = 4f

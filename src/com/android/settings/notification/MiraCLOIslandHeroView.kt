@@ -1,5 +1,5 @@
 /*
- * SPDX-FileCopyrightText: MiraCLO
+ * SPDX-FileCopyrightText: MIRACLO
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -19,7 +19,7 @@ import android.util.TypedValue
 import android.view.View
 
 /**
- * MiraCLO: the picture at the top of Settings > Notifications > Dynamic Island.
+ * MIRACLO: the picture at the top of Settings > Notifications > Dynamic Island.
  *
  * The top of a phone screen with the island on it: a call pill (green dot and time) on the camera
  * and a round music pill beside it. Drawn rather than an image so it follows light and dark theme.

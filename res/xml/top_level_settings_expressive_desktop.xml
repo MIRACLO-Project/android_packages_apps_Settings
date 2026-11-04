@@ -20,7 +20,7 @@
     xmlns:settings="http://schemas.android.com/apk/res-auto"
     android:key="top_level_settings">
 
-    <!-- MiraCLO: Mira Studio, right under the search bar -->
+    <!-- MIRACLO: Mira Studio, right under the search bar -->
     <com.android.settings.miraclo.studio.MiraStudioBannerPreference
         android:fragment="com.android.settings.miraclo.studio.MiraStudioFragment"
         android:key="top_level_miraclo_studio"

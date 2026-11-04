@@ -1,5 +1,5 @@
 /*
- * SPDX-FileCopyrightText: MiraCLO
+ * SPDX-FileCopyrightText: MIRACLO
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -10,7 +10,7 @@ import android.app.settings.SettingsEnums;
 import com.android.settings.R;
 import com.android.settings.dashboard.DashboardFragment;
 
-/** MiraCLO: Settings > Display > Liquid Glass: where SystemUI uses Liquid Glass. */
+/** MIRACLO: Settings > Display > Liquid Glass: where SystemUI uses Liquid Glass. */
 public class MiraCLOLiquidGlassSettings extends DashboardFragment {
 
     private static final String TAG = "MiraCLOLiquidGlassSettings";

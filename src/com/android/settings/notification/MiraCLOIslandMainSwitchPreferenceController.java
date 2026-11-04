@@ -1,5 +1,5 @@
 /*
- * SPDX-FileCopyrightText: MiraCLO
+ * SPDX-FileCopyrightText: MIRACLO
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -11,7 +11,7 @@ import android.provider.Settings;
 import com.android.settings.core.TogglePreferenceController;
 
 /**
- * MiraCLO: the "Use Dynamic Island" bar at the top of Settings > Notifications > Dynamic Island.
+ * MIRACLO: the "Use Dynamic Island" bar at the top of Settings > Notifications > Dynamic Island.
  * Stored in Settings.Secure "miraclo_island_enabled" (read by SystemUI), off by default.
  */
 public class MiraCLOIslandMainSwitchPreferenceController extends TogglePreferenceController {

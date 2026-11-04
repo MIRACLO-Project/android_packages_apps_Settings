@@ -1,5 +1,5 @@
 /*
- * SPDX-FileCopyrightText: MiraCLO
+ * SPDX-FileCopyrightText: MIRACLO
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -18,7 +18,7 @@ import com.android.settingslib.metadata.SensitivityLevel
 import com.android.settingslib.preference.PreferenceBinding
 
 /**
- * "MiraCLO version" row on the Android version page, e.g. "1.0 (Aurora)". Reads
+ * "MIRACLO version" row on the Android version page, e.g. "1.0 (Aurora)". Reads
  * ro.miraclo.version and ro.miraclo.codename.
  */
 class MiraCLOAndroidVersionPreference :
@@ -47,7 +47,7 @@ class MiraCLOAndroidVersionPreference :
 
     override fun getSummary(context: Context): CharSequence? =
         if (SystemProperties.get(MIRACLO_VERSION_PROP).isNotEmpty()) {
-            // Same text as Settings > About phone > MiraCLO version, e.g. "1.0 (Aurora)".
+            // Same text as Settings > About phone > MIRACLO version, e.g. "1.0 (Aurora)".
             MiraCLOVersionPreferenceController.formatVersion()
         } else {
             context.getString(R.string.device_info_default)

@@ -1,5 +1,5 @@
 /*
- * SPDX-FileCopyrightText: MiraCLO
+ * SPDX-FileCopyrightText: MIRACLO
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -10,7 +10,7 @@ import android.app.settings.SettingsEnums;
 import com.android.settings.R;
 import com.android.settings.dashboard.DashboardFragment;
 
-/** MiraCLO: Settings > Notifications > Dynamic Island. */
+/** MIRACLO: Settings > Notifications > Dynamic Island. */
 public class MiraCLOIslandSettings extends DashboardFragment {
 
     private static final String TAG = "MiraCLOIslandSettings";

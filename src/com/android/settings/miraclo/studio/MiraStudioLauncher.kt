@@ -1,5 +1,5 @@
 /*
- * SPDX-FileCopyrightText: MiraCLO
+ * SPDX-FileCopyrightText: MIRACLO
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -64,7 +64,7 @@ import com.android.settings.R
 import com.android.settings.spa.preference.ComposePreference
 
 /**
- * Talks to the MiraCLO launcher through its customisation provider (the same one the wallpaper
+ * Talks to the MIRACLO launcher through its customisation provider (the same one the wallpaper
  * picker uses): icon shapes, grid and themed icons.
  */
 internal class MiraLauncherBridge(private val context: Context) {
