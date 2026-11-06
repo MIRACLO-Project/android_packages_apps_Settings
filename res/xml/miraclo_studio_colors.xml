@@ -10,6 +10,20 @@
     android:key="miraclo_studio_colors"
     android:title="@string/miraclo_studio_colors_title">
 
+    <com.android.settings.miraclo.studio.MiraHeroPreference
+        android:key="mira_hero_colours" />
+
     <com.android.settings.miraclo.studio.MiraStudioColorsPreference
         android:key="miraclo_studio_colors_content" />
+
+    <Preference
+        android:key="miraclo_colors_fonts_link"
+        android:title="@string/miraclo_style_fonts"
+        android:summary="@string/miraclo_link_fonts_sum"
+        android:fragment="com.android.settings.miraclo.studio.MiraStudioFontsFragment" />
+
+    <!-- MIRACLO: everything on this page back to how it ships -->
+    <com.android.settings.miraclo.MiraResetPreference
+        android:key="miraclo_reset_page"
+        android:order="10000" />
 </PreferenceScreen>

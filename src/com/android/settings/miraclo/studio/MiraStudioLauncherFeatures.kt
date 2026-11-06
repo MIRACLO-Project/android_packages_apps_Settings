@@ -77,6 +77,11 @@ class MiraStudioLauncherFeaturesPreference @JvmOverloads constructor(
         setContent { Page() }
     }
 
+    override fun onBindViewHolder(holder: androidx.preference.PreferenceViewHolder) {
+        super.onBindViewHolder(holder)
+        miraFlat(holder)
+    }
+
     private class App(val pkg: String, val label: String, val icon: ImageBitmap)
 
     @Composable
@@ -144,7 +149,7 @@ class MiraStudioLauncherFeaturesPreference @JvmOverloads constructor(
                         dots = it
                         Settings.Secure.putInt(cr, Settings.Secure.NOTIFICATION_BADGING, if (it) 1 else 0)
                     }
-                    StudioNavRow("Icon pack", "Home screen and app drawer packs, in Home settings") {
+                    StudioNavRow("Icon pack", "Android's round icons, Mira icons or a pack you installed") {
                         ctx.startActivity(
                             Intent(Intent.ACTION_APPLICATION_PREFERENCES)
                                 .setPackage("com.android.launcher3")
@@ -171,34 +176,22 @@ class MiraStudioLauncherFeaturesPreference @JvmOverloads constructor(
                 }
             }
 
-            // Gestures: tap a row to step through its choices.
+            // Gestures: each opens its list of choices.
             StudioCard {
                 Column(Modifier.padding(vertical = 6.dp)) {
                     Text("Gestures", color = cs.onSurface, fontSize = 16.sp, fontWeight = FontWeight.SemiBold, modifier = Modifier.padding(start = 20.dp, top = 12.dp, bottom = 4.dp))
                     GESTURES.forEachIndexed { i, g ->
                         val state = gestures[i]
-                        Row(
-                            Modifier.fillMaxWidth()
-                                .clickable {
-                                    state.intValue = (state.intValue + 1) % g.values.size
-                                    Settings.Secure.putInt(cr, g.key, state.intValue)
-                                    if (g.key == KEY_SWIPE_DOWN) {
-                                        Settings.Secure.putInt(cr, KEY_SEARCH_SWIPE, if (state.intValue == 1) 1 else 0)
-                                    }
-                                }
-                                .padding(horizontal = 20.dp, vertical = 16.dp),
-                            verticalAlignment = Alignment.CenterVertically,
-                        ) {
-                            Column(Modifier.weight(1f)) {
-                                Text(g.title, color = cs.onSurface, fontSize = 16.sp)
-                                Text(g.summary, color = cs.onSurfaceVariant, fontSize = 13.sp, modifier = Modifier.padding(top = 2.dp))
-                            }
-                            Box(
-                                Modifier.clip(RoundedCornerShape(16.dp))
-                                    .background(cs.secondaryContainer)
-                                    .padding(horizontal = 12.dp, vertical = 6.dp)
-                            ) {
-                                Text(g.values[state.intValue] + "  ⇅", color = cs.onSecondaryContainer, fontSize = 13.sp, fontWeight = FontWeight.Medium)
+                        StudioDropdownRow(
+                            g.title,
+                            g.summary,
+                            g.values.mapIndexed { k, label -> k.toString() to label },
+                            state.intValue.toString(),
+                        ) { pick ->
+                            state.intValue = pick.toInt()
+                            Settings.Secure.putInt(cr, g.key, state.intValue)
+                            if (g.key == KEY_SWIPE_DOWN) {
+                                Settings.Secure.putInt(cr, KEY_SEARCH_SWIPE, if (state.intValue == 1) 1 else 0)
                             }
                         }
                     }
@@ -222,7 +215,7 @@ class MiraStudioLauncherFeaturesPreference @JvmOverloads constructor(
                                 modifier = Modifier.padding(top = 2.dp),
                             )
                         }
-                        Text(if (showHidden) "▲" else "▼", color = cs.onSurfaceVariant, fontSize = 13.sp)
+                        Text(if (showHidden) "Done" else "Choose", color = cs.primary, fontSize = 14.sp, fontWeight = FontWeight.Medium)
                     }
                     if (showHidden) {
                         if (apps.isEmpty()) {

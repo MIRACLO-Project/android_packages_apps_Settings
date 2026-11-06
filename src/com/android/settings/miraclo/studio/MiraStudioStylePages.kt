@@ -70,6 +70,11 @@ class MiraStudioFontsPreference @JvmOverloads constructor(
         setContent { Page() }
     }
 
+    override fun onBindViewHolder(holder: androidx.preference.PreferenceViewHolder) {
+        super.onBindViewHolder(holder)
+        miraFlat(holder)
+    }
+
     @Composable
     private fun Page() {
         val ctx = LocalContext.current
@@ -97,6 +102,10 @@ class MiraStudioFontsPreference @JvmOverloads constructor(
                     Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
                         Text("Text size", color = cs.onSurface, fontSize = 16.sp, modifier = Modifier.weight(1f))
                         Text("${(scale * 100).roundToInt()}%", color = cs.primary, fontSize = 14.sp, fontWeight = FontWeight.SemiBold)
+                        StudioResetIcon(scale != 1f) {
+                            scale = 1f
+                            Settings.System.putFloat(cr, Settings.System.FONT_SCALE, 1f)
+                        }
                     }
                     Slider(
                         value = scale,
@@ -133,6 +142,11 @@ class MiraStudioMotionPreference @JvmOverloads constructor(
 ) : ComposePreference(context, attrs) {
     init {
         setContent { Page() }
+    }
+
+    override fun onBindViewHolder(holder: androidx.preference.PreferenceViewHolder) {
+        super.onBindViewHolder(holder)
+        miraFlat(holder)
     }
 
     @Composable

@@ -21,7 +21,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
 
         <TextView
             android:id="@android:id/title"
@@ -36,6 +37,21 @@
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceListItemSecondary"
             android:textColor="?android:attr/textColorSecondary" />
+
+        <!-- MIRACLO: back to the default value; shown only when the value was changed. -->
+        <ImageView
+            android:id="@+id/miraclo_reset"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginStart="6dp"
+            android:layout_marginTop="-6dp"
+            android:layout_marginBottom="-6dp"
+            android:padding="6dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_miraclo_reset"
+            android:background="?android:attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/miraclo_reset_slider"
+            android:visibility="gone" />
     </LinearLayout>
 
     <TextView

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- SPDX-FileCopyrightText: MIRACLO
+     SPDX-License-Identifier: Apache-2.0
+     Settings each page's own (Compose) controls keep, cleared by Reset to default. -->
+<resources>
+    <string-array name="miraclo_reset_miraclo_studio_lock_clocks" translatable="false">
+        <item>miraclo_lock_clock_weight</item>
+        <item>miraclo_lock_clock_scale</item>
+        <item>miraclo_lock_clock_layout</item>
+        <item>miraclo_lock_clock_align</item>
+        <item>miraclo_lock_clock_font</item>
+        <item>lock_screen_custom_clock_face</item>
+    </string-array>
+    <string-array name="miraclo_reset_miraclo_studio_home" translatable="false">
+        <item>miraclo_icon_scale</item>
+        <item>miraclo_themed_icons_drawer</item>
+        <item>miraclo_icon_shape_drawer</item>
+    </string-array>
+    <string-array name="miraclo_reset_miraclo_studio_launcher" translatable="false">
+        <item>miraclo_home_labels</item>
+        <item>notification_badging</item>
+        <item>miraclo_page_transition</item>
+        <item>miraclo_gesture_double_tap</item>
+        <item>miraclo_gesture_swipe_down</item>
+        <item>miraclo_gesture_swipe_up</item>
+        <item>miraclo_gesture_pinch</item>
+        <item>miraclo_layout_lock</item>
+        <item>miraclo_folder_blur</item>
+    </string-array>
+    <string-array name="miraclo_reset_miraclo_studio_home_search" translatable="false">
+        <item>miraclo_home_search</item>
+        <item>miraclo_home_search_scopes</item>
+        <item>miraclo_home_search_swipe</item>
+        <item>miraclo_home_search_app</item>
+        <item>miraclo_gesture_swipe_down</item>
+    </string-array>
+    <string-array name="miraclo_reset_miraclo_studio_wallpaper" translatable="false">
+        <item>miraclo_wallpaper_fx_blur</item>
+        <item>miraclo_wallpaper_fx_dim</item>
+        <item>miraclo_wallpaper_fx_tone</item>
+        <item>miraclo_wallpaper_fx_vignette</item>
+    </string-array>
+    <string-array name="miraclo_reset_miraclo_studio_motion" translatable="false">
+        <item>miraclo_motion_style</item>
+    </string-array>
+    <string-array name="miraclo_reset_miraclo_studio_tuning_battery" translatable="false">
+        <item>miraclo_island_charging</item>
+        <item>miraclo_charging_ring</item>
+    </string-array>
+</resources>

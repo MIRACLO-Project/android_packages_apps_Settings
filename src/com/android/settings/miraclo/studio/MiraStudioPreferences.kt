@@ -45,12 +45,69 @@ class MiraStudioBannerPreference @JvmOverloads constructor(
     override fun onBindViewHolder(holder: PreferenceViewHolder) {
         super.onBindViewHolder(holder)
         holder.itemView.setBackgroundColor(android.graphics.Color.TRANSPARENT)
-        (holder.findViewById(R.id.miraclo_banner_art1) as? MiraStudioArtView)?.kind =
-            MiraStudioArtView.BANNER_ISLAND
-        (holder.findViewById(R.id.miraclo_banner_art2) as? MiraStudioArtView)?.kind =
-            MiraStudioArtView.BANNER_QS
-        (holder.findViewById(R.id.miraclo_banner_art3) as? MiraStudioArtView)?.kind =
-            MiraStudioArtView.BANNER_GLASS
+        // The approved premium card: a deep gradient, the name, what it covers, Open, and the
+        // user's real lock and home screens tilted on the right.
+        val banner = holder.findViewById(R.id.miraclo_studio_banner) as? android.widget.LinearLayout ?: return
+        val dp = context.resources.displayMetrics.density
+        fun px(v: Int) = (v * dp).toInt()
+        banner.removeAllViews()
+        banner.setPadding(0, 0, 0, 0)
+        banner.background =
+            android.graphics.drawable.GradientDrawable(
+                    android.graphics.drawable.GradientDrawable.Orientation.TL_BR,
+                    intArrayOf(0xFF2B3A7A.toInt(), 0xFF6A4FB8.toInt(), 0xFFC0789C.toInt()),
+                )
+                .apply { cornerRadius = 28 * dp }
+        banner.clipToOutline = true
+        val sans = android.graphics.Typeface.create("mira-sans", android.graphics.Typeface.NORMAL)
+        val frame = android.widget.FrameLayout(context)
+        frame.minimumHeight = px(168)
+        frame.addView(
+            MiraPreviewView(context, MiraPreviewView.BANNER),
+            android.widget.FrameLayout.LayoutParams(px(150), px(160), android.view.Gravity.END or android.view.Gravity.CENTER_VERTICAL),
+        )
+        val col =
+            android.widget.LinearLayout(context).apply {
+                orientation = android.widget.LinearLayout.VERTICAL
+                setPadding(px(20), px(20), px(140), px(20))
+            }
+        col.addView(
+            TextView(context).apply {
+                setText(R.string.miraclo_studio_title)
+                setTextColor(android.graphics.Color.WHITE)
+                textSize = 26f
+                typeface = android.graphics.Typeface.create(sans, 700, false)
+            })
+        col.addView(
+            TextView(context).apply {
+                setText(R.string.miraclo_studio_summary)
+                setTextColor(0xD9FFFFFF.toInt())
+                textSize = 13f
+                typeface = sans
+                setPadding(0, px(4), 0, 0)
+            })
+        col.addView(
+            TextView(context).apply {
+                setText(R.string.miraclo_open)
+                setTextColor(android.graphics.Color.WHITE)
+                textSize = 13f
+                typeface = android.graphics.Typeface.create(sans, 600, false)
+                setPadding(px(16), px(7), px(16), px(7))
+                background =
+                    android.graphics.drawable.GradientDrawable().apply {
+                        setColor(0x33FFFFFF)
+                        cornerRadius = 16 * dp
+                    }
+            },
+            android.widget.LinearLayout.LayoutParams(
+                    android.view.ViewGroup.LayoutParams.WRAP_CONTENT,
+                    android.view.ViewGroup.LayoutParams.WRAP_CONTENT,
+                )
+                .apply { topMargin = px(14) },
+        )
+        frame.addView(col)
+        banner.addView(frame, android.widget.LinearLayout.LayoutParams(
+            android.view.ViewGroup.LayoutParams.MATCH_PARENT, android.view.ViewGroup.LayoutParams.WRAP_CONTENT))
         // The whole row is the click target (Settings home opens the fragment and keeps the
         // highlight in two-pane mode); the card only shows the pressed state.
     }
@@ -124,6 +181,44 @@ class MiraStudioCardsPreference @JvmOverloads constructor(
                 MiraStudioTuningFragment::class.java.name),
         )
 
+    // The Mira Studio home: every page in one place, grouped the way people look for things.
+    private val sections: List<Pair<Int, List<Card>>> =
+        listOf(
+            R.string.miraclo_sec_personalise to listOf(
+                Card(MiraStudioArtView.BANNER_ISLAND, R.string.miraclo_card_lock,
+                    R.string.miraclo_lock_clocks_sum, MiraStudioLockClocksFragment::class.java.name),
+                Card(MiraStudioArtView.HOME, R.string.miraclo_card_home,
+                    R.string.miraclo_studio_home_summary, MiraStudioHomeFragment::class.java.name),
+                Card(MiraStudioArtView.HOME, R.string.miraclo_style_wallpaper,
+                    R.string.miraclo_style_wallpaper_sum, MiraStudioWallpaperFragment::class.java.name),
+                Card(MiraStudioArtView.COLORS, R.string.miraclo_card_colours_fonts,
+                    R.string.miraclo_card_colours_fonts_sum, MiraStudioColorsFragment::class.java.name)),
+            R.string.miraclo_sec_systemui to listOf(
+                Card(MiraStudioArtView.ISLAND, R.string.miraclo_card_statusbar,
+                    R.string.miraclo_card_statusbar_sum, MiraStudioIconsFragment::class.java.name),
+                Card(MiraStudioArtView.ISLAND, R.string.miraclo_island_title,
+                    R.string.miraclo_studio_island_summary, MiraCLOIslandSettings::class.java.name),
+                Card(MiraStudioArtView.QS, R.string.miraclo_studio_qs_title,
+                    R.string.miraclo_studio_qs_summary, MiraStudioQsFragment::class.java.name),
+                Card(MiraStudioArtView.VOLUME, R.string.miraclo_studio_volume_title,
+                    R.string.miraclo_studio_volume_summary, MiraStudioVolumeFragment::class.java.name)),
+            R.string.miraclo_sec_effects to listOf(
+                Card(MiraStudioArtView.GLASS, R.string.miraclo_liquid_glass_title,
+                    R.string.miraclo_studio_glass_summary, MiraCLOLiquidGlassSettings::class.java.name),
+                Card(MiraStudioArtView.GLASS, R.string.miraclo_style_motion,
+                    R.string.miraclo_style_motion_sum, MiraStudioMotionFragment::class.java.name)),
+            R.string.miraclo_sec_performance to listOf(
+                Card(MiraStudioArtView.SHADE, R.string.miraclo_tuning_display,
+                    R.string.miraclo_tuning_display_sum, MiraStudioDisplayTuningFragment::class.java.name),
+                Card(MiraStudioArtView.VOLUME, R.string.miraclo_card_battery,
+                    R.string.miraclo_tuning_battery_sum, MiraStudioBatteryTuningFragment::class.java.name)),
+            R.string.miraclo_sec_privacy to listOf(
+                Card(MiraStudioArtView.SHADE, R.string.miraclo_card_privacy,
+                    R.string.miraclo_card_privacy_sum, MiraStudioPrivacyFragment::class.java.name),
+                Card(MiraStudioArtView.COLORS, R.string.miraclo_card_update,
+                    R.string.miraclo_card_update_sum, MiraStudioUpdateFragment::class.java.name)),
+        )
+
     init {
         layoutResource = R.layout.miraclo_studio_cards
         isSelectable = false
@@ -131,13 +226,65 @@ class MiraStudioCardsPreference @JvmOverloads constructor(
 
     override fun onBindViewHolder(holder: PreferenceViewHolder) {
         super.onBindViewHolder(holder)
-        val cards = branches[key] ?: branchCards
-        (holder.findViewById(R.id.miraclo_cards_sub) as? TextView)?.apply {
-            setText(R.string.miraclo_studio_pick)
-            visibility = if (branches.containsKey(key)) View.GONE else View.VISIBLE
-        }
+        miraFlat(holder)
+        val home = !branches.containsKey(key)
+        (holder.findViewById(R.id.miraclo_cards_sub) as? TextView)?.visibility = View.GONE
         val rows = holder.findViewById(R.id.miraclo_cards_rows) as? android.widget.LinearLayout ?: return
         rows.removeAllViews()
+        if (home) {
+            // The approved Mira Studio home: search, the live lock and home screens, sections of
+            // cards with live previews, then Privacy & tools and Software update.
+            val I = MiraStudioHomeBuilder::Item
+            val H = MiraPreviewView
+            MiraStudioHomeBuilder.build(
+                context,
+                rows,
+                listOf(
+                    R.string.miraclo_sec_personalise to listOf(
+                        I(H.LOCK, R.string.miraclo_card_lock, R.string.miraclo_lock_clocks_sum,
+                            MiraStudioLockClocksFragment::class.java.name, -1),
+                        I(H.HOME, R.string.miraclo_card_home, R.string.miraclo_studio_home_summary,
+                            MiraStudioHomeFragment::class.java.name, -1),
+                        I(H.WALLPAPER, R.string.miraclo_style_wallpaper, R.string.miraclo_style_wallpaper_sum,
+                            MiraStudioWallpaperFragment::class.java.name, -1),
+                        I(H.COLOURS, R.string.miraclo_card_colours_fonts, R.string.miraclo_card_colours_fonts_sum,
+                            MiraStudioColorsFragment::class.java.name, -1)),
+                    R.string.miraclo_sec_systemui to listOf(
+                        I(H.STATUS_BAR, R.string.miraclo_card_statusbar, R.string.miraclo_card_statusbar_sum,
+                            MiraStudioIconsFragment::class.java.name, -1),
+                        I(H.ISLAND, R.string.miraclo_island_title, R.string.miraclo_studio_island_summary,
+                            MiraCLOIslandSettings::class.java.name, -1),
+                        I(0, R.string.miraclo_studio_qs_title, R.string.miraclo_studio_qs_summary,
+                            MiraStudioQsFragment::class.java.name, MiraStudioArtView.QS),
+                        I(0, R.string.miraclo_studio_volume_title, R.string.miraclo_studio_volume_summary,
+                            MiraStudioVolumeFragment::class.java.name, MiraStudioArtView.VOLUME),
+                        I(0, R.string.miraclo_power_title, R.string.miraclo_power_card_sum,
+                            MiraStudioPowerFragment::class.java.name, MiraStudioArtView.SHADE)),
+                    R.string.miraclo_sec_effects to listOf(
+                        I(0, R.string.miraclo_liquid_glass_title, R.string.miraclo_studio_glass_summary,
+                            MiraCLOLiquidGlassSettings::class.java.name, MiraStudioArtView.GLASS),
+                        I(H.ANIMATIONS, R.string.miraclo_style_motion, R.string.miraclo_style_motion_sum,
+                            MiraStudioMotionFragment::class.java.name, -1),
+                        I(0, R.string.miraclo_sounds_title, R.string.miraclo_sounds_card_sum,
+                            MiraStudioSoundsFragment::class.java.name, MiraStudioArtView.VOLUME)),
+                    R.string.miraclo_sec_performance to listOf(
+                        I(H.DISPLAY, R.string.miraclo_tuning_display, R.string.miraclo_tuning_display_sum,
+                            MiraStudioDisplayTuningFragment::class.java.name, -1),
+                        I(H.BATTERY, R.string.miraclo_card_battery, R.string.miraclo_tuning_battery_sum,
+                            MiraStudioBatteryTuningFragment::class.java.name, -1)),
+                ),
+                R.string.miraclo_sec_privacy to listOf(
+                    I(0, R.string.miraclo_card_privacy, R.string.miraclo_card_privacy_sum,
+                        MiraStudioPrivacyFragment::class.java.name, -1)),
+                I(0, R.string.miraclo_card_update, R.string.miraclo_card_update_sum,
+                    MiraStudioUpdateFragment::class.java.name, -1),
+            )
+        } else {
+            addGrid(rows, branches.getValue(key))
+        }
+    }
+
+    private fun addGrid(rows: android.widget.LinearLayout, cards: List<Card>) {
         val inflater = android.view.LayoutInflater.from(context)
         val dp = context.resources.displayMetrics.density
         for (pair in cards.chunked(2)) {
@@ -213,6 +360,9 @@ class MiraStudioQsStylePreference @JvmOverloads constructor(
         super.onAttached()
         context.contentResolver.registerContentObserver(
             Settings.Secure.getUriFor(KEY_ROUND), false, observer)
+        // The style can also change from the panel itself; follow it.
+        context.contentResolver.registerContentObserver(
+            Settings.Secure.getUriFor(KEY_STYLE), false, observer)
     }
 
     override fun onDetached() {
@@ -228,6 +378,7 @@ class MiraStudioQsStylePreference @JvmOverloads constructor(
 
     override fun onBindViewHolder(holder: PreferenceViewHolder) {
         super.onBindViewHolder(holder)
+        miraFlat(holder)
         val current = style
         val round = Settings.Secure.getInt(context.contentResolver, KEY_ROUND, 0) != 0
         for (s in styles) {

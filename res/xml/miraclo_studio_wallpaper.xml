@@ -10,4 +10,9 @@
 
     <com.android.settings.miraclo.studio.MiraStudioWallpaperPreference
         android:key="miraclo_studio_wallpaper_content" />
+
+    <!-- MIRACLO: everything on this page back to how it ships -->
+    <com.android.settings.miraclo.MiraResetPreference
+        android:key="miraclo_reset_page"
+        android:order="10000" />
 </PreferenceScreen>

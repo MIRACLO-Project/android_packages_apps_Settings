@@ -20,7 +20,8 @@ import org.json.JSONObject;
  * THEME_CUSTOMIZATION_OVERLAY_PACKAGES), which System UI applies at once.
  */
 public class MiraIconStylePreference extends ListPreference {
-    static final String CATEGORY = "android.theme.customization.icon_pack.systemui";
+    // Wi-Fi and mobile signal icons are Android's own (framework) drawables, so the packs target it.
+    static final String CATEGORY = "android.theme.customization.icon_pack.android";
     static final String DEFAULT = "default";
 
     public MiraIconStylePreference(Context context, AttributeSet attrs) {

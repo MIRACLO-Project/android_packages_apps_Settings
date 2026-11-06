@@ -66,6 +66,11 @@ class MiraStudioColorsPreference @JvmOverloads constructor(
         setContent { Colors() }
     }
 
+    override fun onBindViewHolder(holder: androidx.preference.PreferenceViewHolder) {
+        super.onBindViewHolder(holder)
+        miraFlat(holder)
+    }
+
     private class Theme(val source: String, val seed: Int, val style: String)
 
     private fun read(ctx: Context): Theme {

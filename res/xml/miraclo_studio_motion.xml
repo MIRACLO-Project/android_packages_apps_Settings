@@ -8,6 +8,20 @@
     android:key="miraclo_studio_motion"
     android:title="@string/miraclo_style_motion">
 
+    <com.android.settings.miraclo.studio.MiraHeroPreference
+        android:key="mira_hero_motion" />
+
     <com.android.settings.miraclo.studio.MiraStudioMotionPreference
         android:key="miraclo_studio_motion_content" />
+
+    <com.android.settings.miraclo.SecureSettingSwitchPreference
+        android:key="miraclo_wavy_progress"
+        android:title="@string/miraclo_wavy_progress_title"
+        android:summary="@string/miraclo_wavy_progress_summary"
+        android:defaultValue="true" />
+
+    <!-- MIRACLO: everything on this page back to how it ships -->
+    <com.android.settings.miraclo.MiraResetPreference
+        android:key="miraclo_reset_page"
+        android:order="10000" />
 </PreferenceScreen>

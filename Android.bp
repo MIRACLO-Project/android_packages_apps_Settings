@@ -68,7 +68,12 @@ android_library {
         "res-export", // for external usage
         "res-product",
     ],
-    optional_uses_libs: ["com.android.extensions.appfunctions"],
+    optional_uses_libs: [
+        "com.android.extensions.appfunctions",
+        // Qualcomm phone libraries the telephony code uses (loaded when present)
+        "extphonelib",
+        "qti-telephony-utils",
+    ],
     static_libs: [
         // External dependencies
         "androidx.compose.runtime_runtime-livedata",

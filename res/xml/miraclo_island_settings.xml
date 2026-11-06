@@ -23,17 +23,42 @@
         android:persistent="false"
         settings:controller="com.android.settings.notification.MiraCLOIslandMainSwitchPreferenceController" />
 
-    <com.android.settings.miraclo.SecureSettingListPreference
-        android:key="miraclo_island_look"
-        android:title="@string/miraclo_island_look"
-        android:entries="@array/miraclo_island_look_e"
-        android:entryValues="@array/miraclo_v2"
-        android:defaultValue="0"
-        android:summary="%s" />
+    <PreferenceCategory
+        android:key="miraclo_island_pill_size"
+        android:title="@string/miraclo_island_pill_size_title">
+
+        <com.android.settings.miraclo.SecureSettingSliderPreference
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:key="miraclo_island_pill_length"
+            android:dependency="miraclo_island_enabled"
+            android:title="@string/miraclo_island_pill_length"
+            android:summary="@string/miraclo_island_pill_size_summary"
+            android:max="210"
+            app:min="120"
+            app:showSeekBarValue="true"
+            android:defaultValue="174" />
+
+        <com.android.settings.miraclo.SecureSettingSliderPreference
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:key="miraclo_island_pill_height"
+            android:dependency="miraclo_island_enabled"
+            android:title="@string/miraclo_island_pill_height"
+            android:max="34"
+            app:min="24"
+            app:showSeekBarValue="true"
+            android:defaultValue="28" />
+    </PreferenceCategory>
 
     <PreferenceCategory
         android:key="miraclo_island_sources"
         android:title="@string/miraclo_island_sources_title">
+
+        <com.android.settings.miraclo.SecureSettingSwitchPreference
+            android:key="miraclo_island_popups"
+            android:dependency="miraclo_island_enabled"
+            android:title="@string/miraclo_island_popups_title"
+            android:summary="@string/miraclo_island_popups_summary"
+            android:defaultValue="true" />
 
         <com.android.settings.miraclo.SecureSettingSwitchPreference
             android:key="miraclo_island_media"
@@ -158,4 +183,9 @@
         android:title="@string/miraclo_island_footer"
         android:selectable="false"
         settings:searchable="false" />
+
+    <!-- MIRACLO: everything on this page back to how it ships -->
+    <com.android.settings.miraclo.MiraResetPreference
+        android:key="miraclo_reset_page"
+        android:order="10000" />
 </PreferenceScreen>

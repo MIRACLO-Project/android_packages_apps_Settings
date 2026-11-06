@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     SPDX-FileCopyrightText: MIRACLO
+     SPDX-License-Identifier: Apache-2.0
+-->
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:key="miraclo_studio_update"
+    android:title="@string/miraclo_card_update">
+
+    <com.android.settingslib.widget.TopIntroPreference
+        android:key="miraclo_studio_update_intro"
+        android:title="@string/miraclo_update_intro" />
+
+    <Preference
+        android:key="miraclo_update_open"
+        android:title="@string/miraclo_update_check"
+        android:summary="@string/miraclo_update_check_sum">
+        <intent
+            android:action="org.miraclo.updater.OPEN"
+            android:targetPackage="org.miraclo.updater" />
+    </Preference>
+</PreferenceScreen>

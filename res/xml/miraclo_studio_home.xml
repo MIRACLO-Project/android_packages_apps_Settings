@@ -10,6 +10,14 @@
     android:key="miraclo_studio_home"
     android:title="@string/miraclo_studio_home_title">
 
+    <com.android.settings.miraclo.studio.MiraHeroPreference
+        android:key="mira_hero_home" />
+
     <com.android.settings.miraclo.studio.MiraStudioHomeIconsPreference
         android:key="miraclo_studio_home_content" />
+
+    <!-- MIRACLO: everything on this page back to how it ships -->
+    <com.android.settings.miraclo.MiraResetPreference
+        android:key="miraclo_reset_page"
+        android:order="10000" />
 </PreferenceScreen>

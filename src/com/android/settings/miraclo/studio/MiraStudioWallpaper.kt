@@ -81,6 +81,11 @@ class MiraStudioWallpaperPreference @JvmOverloads constructor(
         setContent { Page() }
     }
 
+    override fun onBindViewHolder(holder: androidx.preference.PreferenceViewHolder) {
+        super.onBindViewHolder(holder)
+        miraFlat(holder)
+    }
+
     @Composable
     private fun Page() {
         val ctx = LocalContext.current
@@ -160,8 +165,8 @@ class MiraStudioWallpaperPreference @JvmOverloads constructor(
 
             StudioCard {
                 Column(Modifier.padding(start = 20.dp, end = 20.dp, top = 18.dp, bottom = 10.dp)) {
-                    FxSlider("Blur", "${blur.roundToInt()}", blur, 0f..25f, 24) { blur = it }
-                    FxSlider("Dim", "${dim.roundToInt()}%", dim, 0f..60f, 11) { dim = it }
+                    FxSlider("Blur", "${blur.roundToInt()}", blur, 0f..25f, 24, default = 0f) { blur = it }
+                    FxSlider("Dim", "${dim.roundToInt()}%", dim, 0f..60f, 11, default = 0f) { dim = it }
                     Text("Tone", color = cs.onSurface, fontSize = 16.sp, modifier = Modifier.padding(top = 8.dp, bottom = 10.dp))
                     StudioSegmented(
                         listOf("none" to "None", "mono" to "Mono", "duo" to "Duotone", "warm" to "Warm"),
@@ -216,12 +221,14 @@ class MiraStudioWallpaperPreference @JvmOverloads constructor(
         v: Float,
         range: ClosedFloatingPointRange<Float>,
         steps: Int,
+        default: Float,
         onChange: (Float) -> Unit,
     ) {
         val cs = MaterialTheme.colorScheme
         Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
             Text(title, color = cs.onSurface, fontSize = 16.sp, modifier = Modifier.weight(1f))
             Text(value, color = cs.primary, fontSize = 14.sp, fontWeight = FontWeight.SemiBold)
+            StudioResetIcon(v != default) { onChange(default) }
         }
         Slider(value = v, onValueChange = onChange, valueRange = range, steps = steps)
     }

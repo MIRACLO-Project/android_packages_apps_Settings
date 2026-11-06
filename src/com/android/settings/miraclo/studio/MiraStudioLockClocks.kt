@@ -43,13 +43,23 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.Image
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.graphics.nativeCanvas
+import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.graphics.toArgb
+import androidx.preference.PreferenceViewHolder
 import com.android.settings.spa.preference.ComposePreference
 import org.json.JSONObject
 
 /**
- * Mira Studio › Top Bar › Lock Screen: the 18 MIRACLO clocks (drawn by System UI), their colour,
- * weight and size. Writes the same setting the wallpaper & style picker writes
- * (Settings.Secure LOCK_SCREEN_CUSTOM_CLOCK_FACE), so both stay in step.
+ * Mira Studio › Lock screen: the MIRACLO clock faces (drawn by System UI with the same code as
+ * these previews), their colour, weight and size, and the Custom face's own choices. Writes the
+ * setting the wallpaper & style picker writes (Settings.Secure LOCK_SCREEN_CUSTOM_CLOCK_FACE),
+ * so both stay in step.
  */
 class MiraStudioLockClocksPreference @JvmOverloads constructor(
     context: Context,
@@ -59,29 +69,10 @@ class MiraStudioLockClocksPreference @JvmOverloads constructor(
         setContent { Page() }
     }
 
-    private class Style(val key: String, val name: String, val family: String, val weight: Int, val stacked: Boolean)
-
-    private val styles =
-        listOf(
-            Style("stack", "Stack", "sans-serif", 300, true),
-            Style("bold", "Bold", "sans-serif", 650, false),
-            Style("duo", "Duo", "sans-serif", 700, true),
-            Style("slim", "Slim", "sans-serif", 200, false),
-            Style("classic", "Classic", "sans-serif", 500, false),
-            Style("tall", "Tall", "sans-serif-condensed", 500, true),
-            Style("serif", "Serif", "serif", 400, false),
-            Style("lens", "Lens", "sans-serif", 200, false),
-            Style("analog", "Analog", "sans-serif", 400, false),
-            Style("mono", "Mono", "monospace", 700, false),
-            Style("round", "Round", "sans-serif", 600, true),
-            Style("dot", "Dot", "monospace", 400, false),
-            Style("outline", "Outline", "sans-serif", 800, false),
-            Style("split", "Split", "sans-serif", 700, true),
-            Style("quad", "Quad", "sans-serif", 800, true),
-            Style("elegant", "Elegant", "serif", 500, false),
-            Style("wide", "Wide", "sans-serif", 300, false),
-            Style("neo", "Neo", "sans-serif", 300, true),
-        )
+    override fun onBindViewHolder(holder: PreferenceViewHolder) {
+        super.onBindViewHolder(holder)
+        miraFlat(holder)
+    }
 
     private val colours =
         listOf<Pair<String, Int?>>(
@@ -94,7 +85,25 @@ class MiraStudioLockClocksPreference @JvmOverloads constructor(
             "Gold" to 0xFFFFE08A.toInt(),
         )
 
-    private fun idOf(key: String) = "MIRA_" + key.uppercase()
+    /** A face drawn exactly as on the lock screen, filling the box it is given. */
+    @Composable
+    private fun Face(face: MiraClockFaces.Face, o: MiraClockFaces.Options, color: Color, modifier: Modifier) {
+        val density = LocalContext.current.resources.displayMetrics.density
+        Canvas(modifier) {
+            // Laid out at phone width, then scaled down into the box.
+            val phoneW = 360f * density
+            val (fw, fh) = MiraClockFaces.measure(face, o, "10", "45", density, phoneW * 0.9f)
+            val k = minOf(size.width * 0.86f / maxOf(1f, fw), size.height * 0.8f / maxOf(1f, fh), 1f)
+            drawIntoCanvas { c ->
+                val n = c.nativeCanvas
+                n.save()
+                n.translate(size.width / 2f - fw * k / 2f, size.height / 2f - fh * k / 2f)
+                n.scale(k, k)
+                MiraClockFaces.draw(n, face, o, "10", "45", 322.5f, 270f, color.toArgb(), false, 0f, 0f, fw, fh, density)
+                n.restore()
+            }
+        }
+    }
 
     @Composable
     private fun Page() {
@@ -105,71 +114,106 @@ class MiraStudioLockClocksPreference @JvmOverloads constructor(
             runCatching { JSONObject(Settings.Secure.getString(cr, Settings.Secure.LOCK_SCREEN_CUSTOM_CLOCK_FACE)) }
                 .getOrNull()
         }
-        var styleKey by remember {
-            mutableStateOf(
-                current?.optString("clockId")?.let { id -> styles.firstOrNull { idOf(it.key) == id }?.key } ?: ""
-            )
+        var faceKey by remember {
+            mutableStateOf(MiraClockFaces.FACES.firstOrNull { it.id == current?.optString("clockId") }?.key ?: "")
         }
         var seed by remember {
             mutableStateOf(current?.takeIf { it.has("seedColor") && !it.isNull("seedColor") }?.optInt("seedColor"))
         }
-        var weight by remember { mutableIntStateOf(Settings.Secure.getInt(cr, KEY_WEIGHT, 0)) }
-        var scale by remember { mutableIntStateOf(Settings.Secure.getInt(cr, KEY_SCALE, 100).coerceIn(60, 140)) }
+        fun get(k: String, d: Int) = Settings.Secure.getInt(cr, k, d)
+        var weight by remember { mutableIntStateOf(get(MiraClockFaces.KEY_WEIGHT, 0)) }
+        var scale by remember { mutableIntStateOf(get(MiraClockFaces.KEY_SCALE, 100).coerceIn(60, 140)) }
+        var stacked by remember { mutableStateOf(get(MiraClockFaces.KEY_LAYOUT, 0) == 1) }
+        var alignStart by remember { mutableStateOf(get(MiraClockFaces.KEY_ALIGN, 0) == 1) }
+        var font by remember { mutableIntStateOf(get(MiraClockFaces.KEY_FONT, 0)) }
+        val options = MiraClockFaces.Options(weight, scale / 100f, stacked, alignStart, font)
+        val wall = remember { MiraLive.lock(ctx)?.asImageBitmap() }
+        val shown = MiraClockFaces.FACES.firstOrNull { it.key == faceKey }
+        val ink = seed?.let { Color(it) } ?: Color.White
 
         fun write(key: String, colour: Int?) {
             if (key.isEmpty()) return
-            val json = JSONObject().put("clockId", idOf(key))
+            val f = MiraClockFaces.FACES.first { it.key == key }
+            val json = JSONObject().put("clockId", f.id)
             if (colour != null) json.put("seedColor", colour)
             json.put("metadata", JSONObject().put("_applied_timestamp", System.currentTimeMillis()))
             Settings.Secure.putString(cr, Settings.Secure.LOCK_SCREEN_CUSTOM_CLOCK_FACE, json.toString())
         }
 
         Column(Modifier.fillMaxWidth().padding(vertical = 8.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-            // Styles, three per row.
+            // The lock screen as it will look.
+            Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
+                Box(
+                    Modifier.size(220.dp, 400.dp).clip(RoundedCornerShape(30.dp)).background(Color(0xFF15171C))
+                        .border(5.dp, cs.surfaceContainerHigh, RoundedCornerShape(30.dp))
+                ) {
+                    if (wall != null) {
+                        Image(wall, null, Modifier.fillMaxWidth().height(400.dp), contentScale = ContentScale.Crop)
+                    }
+                    if (shown != null) {
+                        Face(shown, options, ink, Modifier.fillMaxWidth().height(150.dp).padding(top = 30.dp))
+                    } else {
+                        Text("Android's clock", color = Color.White, fontSize = 15.sp, modifier = Modifier.align(Alignment.TopCenter).padding(top = 70.dp))
+                    }
+                }
+            }
+
+            // Faces, two per row, each drawn for real.
             StudioCard {
                 Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
                     Text("Clock", color = cs.onSurface, fontSize = 16.sp, fontWeight = FontWeight.SemiBold, modifier = Modifier.padding(start = 4.dp))
-                    styles.chunked(3).forEach { row ->
+                    MiraClockFaces.FACES.chunked(2).forEach { row ->
                         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                            row.forEach { s ->
-                                val sel = s.key == styleKey
+                            row.forEach { f ->
+                                val sel = f.key == faceKey
                                 Column(
                                     Modifier.weight(1f)
-                                        .height(96.dp)
-                                        .background(Color(0xFF15171C), RoundedCornerShape(20.dp))
-                                        .border(2.dp, if (sel) cs.primary else Color.Transparent, RoundedCornerShape(20.dp))
+                                        .clip(RoundedCornerShape(22.dp))
+                                        .background(Color(0xFF15171C))
+                                        .border(2.5.dp, if (sel) cs.primary else Color.Transparent, RoundedCornerShape(22.dp))
                                         .clickable {
-                                            styleKey = s.key
-                                            write(s.key, seed)
-                                        },
+                                            faceKey = f.key
+                                            write(f.key, seed)
+                                        }
+                                        .padding(bottom = 12.dp),
                                     horizontalAlignment = Alignment.CenterHorizontally,
-                                    verticalArrangement = Arrangement.Center,
                                 ) {
-                                    val family = remember(s.family, s.weight) {
-                                        FontFamily(Typeface.create(Typeface.create(s.family, Typeface.NORMAL), s.weight, false))
-                                    }
-                                    Text(
-                                        if (s.key == "analog") "◷" else if (s.stacked) "10\n45" else "10:45",
-                                        color = Color.White,
-                                        fontFamily = family,
-                                        fontSize = if (s.stacked) 20.sp else 22.sp,
-                                        lineHeight = 20.sp,
-                                        textAlign = TextAlign.Center,
-                                    )
-                                    Text(s.name, color = Color.White.copy(alpha = 0.7f), fontSize = 11.sp, modifier = Modifier.padding(top = 4.dp))
+                                    Face(f, options, Color.White, Modifier.fillMaxWidth().height(92.dp))
+                                    Text(f.name, color = Color.White, fontSize = 13.sp, fontWeight = FontWeight.SemiBold)
                                 }
                             }
-                            repeat(3 - row.size) { Spacer(Modifier.weight(1f)) }
+                            repeat(2 - row.size) { Spacer(Modifier.weight(1f)) }
                         }
                     }
-                    Text(
-                        "Also in Wallpaper & style › Lock screen.",
-                        color = cs.onSurfaceVariant,
-                        fontSize = 12.sp,
-                        modifier = Modifier.padding(start = 4.dp),
-                    )
+                    if (shown != null) {
+                        Text(shown.description, color = cs.onSurfaceVariant, fontSize = 12.sp, modifier = Modifier.padding(start = 4.dp))
+                    }
                 }
             }
+
+            // The Custom face's own choices.
+            if (faceKey == "custom") {
+                StudioCard {
+                    Column(Modifier.padding(vertical = 8.dp)) {
+                        StudioDropdownRow("Lines", null, listOf("0" to "One line", "1" to "Hours over minutes"), if (stacked) "1" else "0") {
+                            stacked = it == "1"
+                            Settings.Secure.putInt(cr, MiraClockFaces.KEY_LAYOUT, if (stacked) 1 else 0)
+                            write(faceKey, seed)
+                        }
+                        StudioDropdownRow("Position", null, listOf("0" to "Centre", "1" to "Left"), if (alignStart) "1" else "0") {
+                            alignStart = it == "1"
+                            Settings.Secure.putInt(cr, MiraClockFaces.KEY_ALIGN, if (alignStart) 1 else 0)
+                            write(faceKey, seed)
+                        }
+                        StudioDropdownRow("Font", null, MiraClockFaces.FONT_NAMES.mapIndexed { i, n -> i.toString() to n }, font.toString()) {
+                            font = it.toInt()
+                            Settings.Secure.putInt(cr, MiraClockFaces.KEY_FONT, font)
+                            write(faceKey, seed)
+                        }
+                    }
+                }
+            }
+
             // Colour.
             StudioCard {
                 Column(Modifier.padding(vertical = 18.dp)) {
@@ -189,21 +233,22 @@ class MiraStudioLockClocksPreference @JvmOverloads constructor(
                                     )
                                     .clickable {
                                         seed = c
-                                        write(styleKey, c)
+                                        write(faceKey, c)
                                     }
                             )
                         }
                     }
                 }
             }
-            // Weight and size.
+
+            // Weight and size (every face).
             StudioCard {
                 Column(Modifier.padding(start = 20.dp, end = 20.dp, top = 18.dp, bottom = 10.dp)) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Text("Weight", color = cs.onSurface, fontSize = 16.sp, modifier = Modifier.weight(1f))
                         Text(
                             when {
-                                weight == 0 -> "Style's own"
+                                weight == 0 -> "The face's own"
                                 weight <= 250 -> "Hairline"
                                 weight <= 350 -> "Light"
                                 weight <= 450 -> "Regular"
@@ -214,13 +259,18 @@ class MiraStudioLockClocksPreference @JvmOverloads constructor(
                             fontSize = 14.sp,
                             fontWeight = FontWeight.SemiBold,
                         )
+                        StudioResetIcon(weight != 0) {
+                            weight = 0
+                            Settings.Secure.putInt(cr, MiraClockFaces.KEY_WEIGHT, 0)
+                            write(faceKey, seed)
+                        }
                     }
                     Slider(
                         value = weight.toFloat(),
                         onValueChange = { weight = (Math.round(it / 100f) * 100) },
                         onValueChangeFinished = {
-                            Settings.Secure.putInt(cr, KEY_WEIGHT, weight)
-                            write(styleKey, seed)
+                            Settings.Secure.putInt(cr, MiraClockFaces.KEY_WEIGHT, weight)
+                            write(faceKey, seed)
                         },
                         valueRange = 0f..900f,
                         steps = 8,
@@ -228,24 +278,30 @@ class MiraStudioLockClocksPreference @JvmOverloads constructor(
                     Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(top = 6.dp)) {
                         Text("Size", color = cs.onSurface, fontSize = 16.sp, modifier = Modifier.weight(1f))
                         Text("$scale%", color = cs.primary, fontSize = 14.sp, fontWeight = FontWeight.SemiBold)
+                        StudioResetIcon(scale != 100) {
+                            scale = 100
+                            Settings.Secure.putInt(cr, MiraClockFaces.KEY_SCALE, 100)
+                            write(faceKey, seed)
+                        }
                     }
                     Slider(
                         value = scale.toFloat(),
                         onValueChange = { scale = (Math.round(it / 5f) * 5).coerceIn(60, 140) },
                         onValueChangeFinished = {
-                            Settings.Secure.putInt(cr, KEY_SCALE, scale)
-                            write(styleKey, seed)
+                            Settings.Secure.putInt(cr, MiraClockFaces.KEY_SCALE, scale)
+                            write(faceKey, seed)
                         },
                         valueRange = 60f..140f,
                         steps = 15,
                     )
+                    Text(
+                        "Also in Wallpaper & style › Lock screen.",
+                        color = cs.onSurfaceVariant,
+                        fontSize = 12.sp,
+                        modifier = Modifier.padding(top = 4.dp, bottom = 8.dp),
+                    )
                 }
             }
         }
-    }
-
-    private companion object {
-        const val KEY_WEIGHT = "miraclo_lock_clock_weight"
-        const val KEY_SCALE = "miraclo_lock_clock_scale"
     }
 }

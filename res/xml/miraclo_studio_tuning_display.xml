@@ -8,6 +8,14 @@
     android:key="miraclo_studio_tuning_display"
     android:title="@string/miraclo_tuning_display">
 
+    <com.android.settings.miraclo.studio.MiraHeroPreference
+        android:key="mira_hero_display" />
+
     <com.android.settings.miraclo.studio.MiraStudioDisplayTuningPreference
         android:key="miraclo_studio_tuning_display_content" />
+
+    <!-- MIRACLO: everything on this page back to how it ships -->
+    <com.android.settings.miraclo.MiraResetPreference
+        android:key="miraclo_reset_page"
+        android:order="10000" />
 </PreferenceScreen>

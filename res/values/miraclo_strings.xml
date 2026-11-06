@@ -7,7 +7,7 @@
     <!-- Mira Studio: everything MIRACLO adds, at the top of Settings -->
     <string name="miraclo_studio_title">Mira Studio</string>
     <string name="miraclo_studio_banner_summary">Quick Settings, Liquid Glass, Dynamic Island and more</string>
-    <string name="miraclo_studio_summary">Everything MIRACLO adds on top of Android, in one place.</string>
+    <string name="miraclo_studio_summary">Lock screen, Quick Settings, Dynamic Island, Liquid Glass and more</string>
     <string name="miraclo_studio_style">Style</string>
 
     <string name="miraclo_studio_qs_title">Quick Settings</string>
@@ -27,7 +27,7 @@
     <string name="miraclo_studio_island_summary">Music, charging, calls</string>
 
     <string name="miraclo_studio_volume_title">Volume panel</string>
-    <string name="miraclo_studio_volume_summary">Style</string>
+    <string name="miraclo_studio_volume_summary">Mira panel or stock</string>
     <string name="miraclo_studio_volume_intro">The panel that appears when you press the volume keys.</string>
 
     <string name="miraclo_studio_shade_title">Notification shade</string>
@@ -35,13 +35,13 @@
     <string name="miraclo_studio_shade_intro">Pull from the left for notifications, from the right for Quick Settings.</string>
     <string name="miraclo_studio_swap_title">Quick Settings on the left</string>
     <string name="miraclo_studio_swap_summary">Swap the two sides of the top edge</string>
-    <string name="miraclo_studio_shade_footer">The split shade is always on in MIRACLO.</string>
+    <string name="miraclo_studio_shade_footer">The split shade is always on.</string>
 
     <string name="miraclo_studio_home_title">Home screen &amp; icons</string>
     <string name="miraclo_studio_home_summary">Icon shapes, grid, themed icons, recents</string>
     <string name="miraclo_studio_launcher_title">Launcher</string>
     <string name="miraclo_studio_launcher_summary">Labels, page transition, gestures, hidden apps</string>
-    <string name="miraclo_studio_home_intro">Options that live in the MIRACLO launcher.</string>
+    <string name="miraclo_studio_home_intro">Options that live in the launcher.</string>
     <string name="miraclo_studio_recents_title">Recents style</string>
     <string name="miraclo_studio_recents_summary">ColorOS stack or default, in Home settings</string>
     <string name="miraclo_studio_icons_title">Icon packs</string>
@@ -88,7 +88,7 @@
     <string name="miraclo_island_footer">Hidden on the lock screen and in full-screen apps.</string>
 
     <!-- Settings > Sound & vibration -->
-    <string name="miraclo_volume_panel_title">MIRACLO volume panel</string>
+    <string name="miraclo_volume_panel_title">Mira volume panel</string>
     <string name="miraclo_volume_panel_summary">Compact edge panel. Turn off for the Android panel</string>
 
     <!-- About phone -->
@@ -112,7 +112,7 @@
     <string name="miraclo_lg_island_pills_title">Island pills</string>
     <string name="miraclo_lg_island_pills_summary">Small pills beside the camera</string>
     <string name="miraclo_lg_volume_title">Volume panel</string>
-    <string name="miraclo_lg_volume_summary">MIRACLO volume panel</string>
+    <string name="miraclo_lg_volume_summary">Mira volume panel</string>
     <string name="miraclo_lg_power_title">Power menu</string>
     <string name="miraclo_lg_power_summary">Power button menu</string>
     <string name="miraclo_lg_look_title">Look</string>
@@ -131,7 +131,7 @@
     <string name="miraclo_branch_topbar">Top Bar</string>
     <string name="miraclo_branch_topbar_sum">Island · Icons · Lock</string>
     <string name="miraclo_lock_clocks">Lock Screen</string>
-    <string name="miraclo_lock_clocks_sum">18 clocks</string>
+    <string name="miraclo_lock_clocks_sum">Clock styles</string>
     <string name="miraclo_branch_home">Home</string>
     <string name="miraclo_branch_home_sum">Icons · Grid · Search</string>
     <string name="miraclo_branch_style">Style</string>
@@ -177,6 +177,75 @@
     <string name="miraclo_speed_size">Text size</string>
     <string name="miraclo_speed_unit">Units</string>
     <string name="miraclo_island_look">Look</string>
+    <string name="miraclo_sec_personalise">Personalise</string>
+    <string name="miraclo_sec_systemui">System UI</string>
+    <string name="miraclo_sec_effects">Effects</string>
+    <string name="miraclo_sec_performance">Performance</string>
+    <string name="miraclo_sec_privacy">Privacy &amp; tools</string>
+    <string name="miraclo_search_studio">Search Mira Studio</string>
+    <string name="miraclo_customise_screens">Customise lock and home screen</string>
+    <string name="miraclo_display_now">Refresh rate now</string>
+    <string name="miraclo_open">Open</string>
+    <string name="miraclo_island_popups_title">Pop-up notifications</string>
+    <string name="miraclo_island_popups_summary">New messages and alerts pop up from the island, with Reply and Mark as read</string>
+    <string name="miraclo_charging_ring_title">Charging animation</string>
+    <string name="miraclo_charging_ring_sum">On the lock screen when you plug in: a ring with the level, the charging speed and when it will be full</string>
+    <string name="miraclo_power_title">Power menu</string>
+    <string name="miraclo_power_card_sum">Slide to power off or restart</string>
+    <string name="miraclo_power_intro">What the power button shows when you hold it.</string>
+    <string name="miraclo_power_mira">Mira power menu</string>
+    <string name="miraclo_power_mira_sum">Slide bars for Power off and Restart, with Emergency, Lockdown and Advanced underneath. Off: Android\'s menu.</string>
+    <string name="miraclo_sounds_title">Sounds &amp; haptics</string>
+    <string name="miraclo_sounds_card_sum">System sounds, touch feel</string>
+    <string name="miraclo_sounds_intro">Mira sounds play for notifications, calls, alarms, locking, unlocking and charging. Pick other sounds in Sound &amp; vibration.</string>
+    <string name="miraclo_sounds_system">System sounds</string>
+    <string name="miraclo_sounds_touch">Touch sounds</string>
+    <string name="miraclo_sounds_touch_sum">A soft click when you tap</string>
+    <string name="miraclo_sounds_lock">Lock and unlock sounds</string>
+    <string name="miraclo_sounds_lock_sum">Mira Lock and Mira Glass</string>
+    <string name="miraclo_sounds_charging">Charging sound</string>
+    <string name="miraclo_sounds_charging_sum">Mira Rise when you plug in</string>
+    <string name="miraclo_sounds_feel">Touch feel</string>
+    <string name="miraclo_sounds_feel_title">Vibration strength</string>
+    <string-array name="miraclo_sounds_feel_e"><item>Light</item><item>Crisp</item><item>Strong</item></string-array>
+    <string-array name="miraclo_sounds_feel_v" translatable="false"><item>1</item><item>2</item><item>3</item></string-array>
+    <string name="miraclo_sounds_vibrate_touch">Vibrate on touch</string>
+    <string name="miraclo_sounds_vibrate_touch_sum">Keyboard, buttons, gestures and sliders</string>
+    <string name="miraclo_sounds_footer">Notification sound: Mira Drop. Ringtone: Mira Aurora. Alarm: Mira Dawn.</string>
+    <string name="miraclo_card_privacy">App privacy</string>
+    <string name="miraclo_card_privacy_sum">Privacy dashboard, clipboard alerts, lock screen</string>
+    <string name="miraclo_card_update">Software update</string>
+    <string name="miraclo_card_update_sum">Download and install new versions</string>
+    <string name="miraclo_update_check">Check for updates</string>
+    <string name="miraclo_update_check_sum">See if a new version is ready, what\'s new, and install it</string>
+    <string name="miraclo_privacy_intro">See which apps used your location, camera, microphone and clipboard, and keep private things off the lock screen.</string>
+    <string name="miraclo_privacy_see">What apps use</string>
+    <string name="miraclo_privacy_dashboard">Privacy dashboard</string>
+    <string name="miraclo_privacy_dashboard_sum">Which apps used location, camera and microphone in the last day</string>
+    <string name="miraclo_privacy_clipboard">Clipboard alerts</string>
+    <string name="miraclo_privacy_clipboard_sum">A short message when an app reads what you copied</string>
+    <string name="miraclo_privacy_lock">Lock screen</string>
+    <string name="miraclo_privacy_lock_notifs">Notifications on the lock screen</string>
+    <string name="miraclo_privacy_lock_notifs_sum">Hide message text, or hide notifications, until you unlock</string>
+    <string name="miraclo_privacy_passwords">Show passwords briefly</string>
+    <string name="miraclo_privacy_passwords_sum">Each character shows for a moment as you type</string>
+    <string name="miraclo_update_intro">New versions download in the background and install when you restart.</string>
+    <string name="miraclo_next_update">These options arrive in the next update.</string>
+    <string name="miraclo_card_lock">Lock screen</string>
+    <string name="miraclo_card_home">Home screen</string>
+    <string name="miraclo_card_colours_fonts">Colours &amp; fonts</string>
+    <string name="miraclo_card_colours_fonts_sum">Palette, text size, bold text</string>
+    <string name="miraclo_card_statusbar">Status bar</string>
+    <string name="miraclo_card_statusbar_sum">Icon style, network, speed</string>
+    <string name="miraclo_card_battery">Battery &amp; charging</string>
+    <string name="miraclo_link_fonts_sum">Text size and bold text</string>
+    <string name="miraclo_link_shade_sum">Split pull: notifications on one side, Quick Settings on the other</string>
+    <string name="miraclo_island_pill_size_title">Pill size</string>
+    <string name="miraclo_island_pill_length">Length</string>
+    <string name="miraclo_island_pill_height">Height</string>
+    <string name="miraclo_island_pill_size_summary">Changes the main pill around the camera. The round pills beside it keep their size and move with it.</string>
+    <string name="miraclo_wavy_progress_title">Wavy progress bar</string>
+    <string name="miraclo_wavy_progress_summary">The played part of music and video progress bars moves like a wave while playing</string>
 
     <string name="miraclo_icons_netlabel">Network type label</string>
     <string-array name="miraclo_icons_netlabel_e"><item>4G</item><item>LTE</item></string-array>
@@ -188,8 +257,11 @@
     <string name="miraclo_icons_vowifi_sum">While calls go over Wi-Fi</string>
     <string-array name="miraclo_v2" translatable="false"><item>0</item><item>1</item></string-array>
     <string-array name="miraclo_v3" translatable="false"><item>0</item><item>1</item><item>2</item></string-array>
+    <string name="miraclo_volume_side_title">Side of the screen</string>
+    <string-array name="miraclo_volume_side_e"><item>Same side as the volume buttons</item><item>Left</item><item>Right</item></string-array>
+    <string-array name="miraclo_volume_side_v" translatable="false"><item>0</item><item>1</item><item>2</item></string-array>
     <string-array name="miraclo_speed_pos_e"><item>Left</item><item>Right</item></string-array>
-    <string-array name="miraclo_speed_style_e"><item>Two lines</item><item>One line</item><item>Total</item></string-array>
+    <string-array name="miraclo_speed_style_e"><item>Speed over unit</item><item>One line</item><item>Down and up</item></string-array>
     <string-array name="miraclo_speed_size_e"><item>Small</item><item>Normal</item><item>Large</item></string-array>
     <string-array name="miraclo_speed_unit_e"><item>Auto (KB/s)</item><item>Bits (Kb/s)</item><item>MB/s</item></string-array>
     <string-array name="miraclo_island_look_e"><item>iOS</item><item>ColorOS</item></string-array>
@@ -197,5 +269,11 @@
     <string name="miraclo_icons_style_cat">Style</string>
     <string name="miraclo_icons_style">Wi-Fi and signal icons</string>
     <string-array name="miraclo_icons_style_e"><item>Android 17</item><item>ColorOS</item><item>iOS</item><item>One UI</item></string-array>
-    <string-array name="miraclo_icons_style_v" translatable="false"><item>default</item><item>org.miraclo.icons.coloros.systemui</item><item>org.miraclo.icons.ios.systemui</item><item>org.miraclo.icons.oneui.systemui</item></string-array>
+    <string-array name="miraclo_icons_style_v" translatable="false"><item>default</item><item>org.miraclo.icons.coloros.android</item><item>org.miraclo.icons.ios.android</item><item>org.miraclo.icons.oneui.android</item></string-array>
+    <string name="miraclo_search_none">Nothing in Mira Studio matches that. Try another word.</string>
+    <string name="miraclo_reset_slider">Reset to default</string>
+    <string name="miraclo_reset_page">Reset to default</string>
+    <string name="miraclo_reset_page_title">Reset this page?</string>
+    <string name="miraclo_reset_page_message">Every setting on this page goes back to how MIRACLO ships it.</string>
+    <string name="miraclo_reset_page_confirm">Reset</string>
 </resources>

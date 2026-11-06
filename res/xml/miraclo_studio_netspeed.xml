@@ -56,4 +56,9 @@
             android:defaultValue="0"
             android:summary="%s" />
     </PreferenceCategory>
+
+    <!-- MIRACLO: everything on this page back to how it ships -->
+    <com.android.settings.miraclo.MiraResetPreference
+        android:key="miraclo_reset_page"
+        android:order="10000" />
 </PreferenceScreen>

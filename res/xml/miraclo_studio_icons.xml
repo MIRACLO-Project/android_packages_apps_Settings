@@ -8,6 +8,9 @@
     android:key="miraclo_studio_icons"
     android:title="@string/miraclo_icons_title">
 
+    <com.android.settings.miraclo.studio.MiraHeroPreference
+        android:key="mira_hero_statusbar" />
+
     <PreferenceCategory android:key="miraclo_icons_style_cat" android:title="@string/miraclo_icons_style_cat">
         <com.android.settings.miraclo.MiraIconStylePreference
             android:key="miraclo_icons_style"
@@ -139,4 +142,9 @@
             app:showSeekBarValue="true"
             android:defaultValue="34" />
     </PreferenceCategory>
+
+    <!-- MIRACLO: everything on this page back to how it ships -->
+    <com.android.settings.miraclo.MiraResetPreference
+        android:key="miraclo_reset_page"
+        android:order="10000" />
 </PreferenceScreen>

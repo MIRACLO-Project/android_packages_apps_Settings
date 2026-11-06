@@ -74,20 +74,29 @@ class MiraStudioDisplayTuningPreference @JvmOverloads constructor(
         setContent { Page() }
     }
 
+    override fun onBindViewHolder(holder: androidx.preference.PreferenceViewHolder) {
+        super.onBindViewHolder(holder)
+        miraFlat(holder)
+    }
+
     @Composable
     private fun Page() {
         val ctx = LocalContext.current
         val cr = ctx.contentResolver
-        val rates = remember {
-            runCatching {
-                ctx.display!!.supportedModes.map { it.refreshRate.roundToInt() }.distinct().sorted()
-            }.getOrDefault(listOf(60, 90, 120))
-        }
-        val top = rates.maxOrNull() ?: 120
+        // The rates the panel really has at its current resolution (on the POCO F5: 60, 90 and
+        // 120 Hz; the emulator only has 60).
+        val rates = remember { MiraLive.rates(ctx).filter { it >= 60 }.ifEmpty { listOf(60) } }
+        val top = rates.maxOrNull() ?: 60
         var rate by remember {
-            val peak = Settings.System.getFloat(cr, KEY_PEAK, top.toFloat()).roundToInt()
-            val min = Settings.System.getFloat(cr, KEY_MIN, 0f).roundToInt()
-            mutableStateOf(if (min > 0 && min == peak) "$peak" else "auto")
+            val peak = Settings.System.getFloat(cr, KEY_PEAK, top.toFloat())
+            val min = Settings.System.getFloat(cr, KEY_MIN, 0f)
+            mutableStateOf(
+                when {
+                    min.isInfinite() -> "force"
+                    min > 0f && min.roundToInt() == peak.roundToInt() && min.roundToInt() in rates -> "${min.roundToInt()}"
+                    else -> "auto"
+                }
+            )
         }
         var counter by remember { mutableStateOf(refreshCounter(null)) }
         val cdm = remember { ctx.getSystemService(ColorDisplayManager::class.java) }
@@ -101,29 +110,38 @@ class MiraStudioDisplayTuningPreference @JvmOverloads constructor(
         Column(Modifier.fillMaxWidth().padding(vertical = 8.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
             TuningHeader("Refresh rate")
             StudioCard {
-                Column {
-                    val summary =
-                        if (rate == "auto") "Switches with what's on screen, up to $top Hz"
-                        else "Always $rate Hz (locked)"
-                    TuningSegmentRow(
-                        "Refresh rate",
-                        summary,
-                        listOf("auto" to "Adaptive") + rates.filter { it >= 60 }.map { "$it" to "$it" },
-                        rate,
-                    ) { pick ->
-                        rate = pick
-                        if (pick == "auto") {
-                            Settings.System.putFloat(cr, KEY_PEAK, top.toFloat())
-                            Settings.System.putFloat(cr, KEY_MIN, 0f)
-                        } else {
-                            Settings.System.putFloat(cr, KEY_PEAK, pick.toFloat())
-                            Settings.System.putFloat(cr, KEY_MIN, pick.toFloat())
+                Column(Modifier.padding(vertical = 6.dp)) {
+                    fun pick(key: String) {
+                        rate = key
+                        when (key) {
+                            "auto" -> {
+                                Settings.System.putFloat(cr, KEY_PEAK, top.toFloat())
+                                Settings.System.putFloat(cr, KEY_MIN, 0f)
+                            }
+                            "force" -> {
+                                // Android's "force peak refresh rate": the highest rate everywhere.
+                                Settings.System.putFloat(cr, KEY_PEAK, top.toFloat())
+                                Settings.System.putFloat(cr, KEY_MIN, Float.POSITIVE_INFINITY)
+                            }
+                            else -> {
+                                Settings.System.putFloat(cr, KEY_PEAK, key.toFloat())
+                                Settings.System.putFloat(cr, KEY_MIN, key.toFloat())
+                            }
                         }
                     }
-                    if (counter != null) {
-                        StudioSwitchRow("Show refresh rate", "Small counter in the corner, for checking", counter == true) {
-                            counter = refreshCounter(it)
-                        }
+                    StudioRadioRow("Adaptive", "Switches with what's on screen, up to $top Hz. Saves battery", rate == "auto") { pick("auto") }
+                    rates.forEach { r ->
+                        StudioRadioRow("$r Hz", if (r == top) "Smoothest for everyday use" else "Steady $r Hz", rate == "$r") { pick("$r") }
+                    }
+                    if (top > 60) {
+                        StudioRadioRow("Force $top Hz", "Always $top Hz, even where apps ask for less. Uses more battery", rate == "force") { pick("force") }
+                    }
+                }
+            }
+            if (counter != null) {
+                StudioCard {
+                    StudioSwitchRow("Show refresh rate", "Small counter in the corner, for checking", counter == true) {
+                        counter = refreshCounter(it)
                     }
                 }
             }
@@ -194,6 +212,11 @@ class MiraStudioBatteryTuningPreference @JvmOverloads constructor(
 ) : ComposePreference(context, attrs) {
     init {
         setContent { Page() }
+    }
+
+    override fun onBindViewHolder(holder: androidx.preference.PreferenceViewHolder) {
+        super.onBindViewHolder(holder)
+        miraFlat(holder)
     }
 
     @Composable

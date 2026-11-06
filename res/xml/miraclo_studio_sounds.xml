@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     SPDX-FileCopyrightText: MIRACLO
+     SPDX-License-Identifier: Apache-2.0
+     Mira Studio > Sounds & haptics. Writes Android's own sound and vibration settings.
+-->
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:key="miraclo_studio_sounds"
+    android:title="@string/miraclo_sounds_title">
+
+    <com.android.settingslib.widget.TopIntroPreference
+        android:key="miraclo_sounds_intro"
+        android:title="@string/miraclo_sounds_intro" />
+
+    <PreferenceCategory
+        android:key="miraclo_sounds_system"
+        android:title="@string/miraclo_sounds_system">
+        <com.android.settings.miraclo.MiraTableSwitchPreference
+            android:key="system:sound_effects_enabled"
+            android:title="@string/miraclo_sounds_touch"
+            android:summary="@string/miraclo_sounds_touch_sum" />
+        <com.android.settings.miraclo.MiraTableSwitchPreference
+            android:key="system:lockscreen_sounds_enabled"
+            android:title="@string/miraclo_sounds_lock"
+            android:summary="@string/miraclo_sounds_lock_sum" />
+        <com.android.settings.miraclo.MiraTableSwitchPreference
+            android:key="global:charging_sounds_enabled"
+            android:title="@string/miraclo_sounds_charging"
+            android:summary="@string/miraclo_sounds_charging_sum" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:key="miraclo_sounds_touch_feel"
+        android:title="@string/miraclo_sounds_feel">
+        <com.android.settings.miraclo.MiraTableListPreference
+            android:key="system:haptic_feedback_intensity"
+            android:title="@string/miraclo_sounds_feel_title"
+            android:entries="@array/miraclo_sounds_feel_e"
+            android:entryValues="@array/miraclo_sounds_feel_v"
+            android:summary="%s" />
+        <com.android.settings.miraclo.MiraTableSwitchPreference
+            android:key="system:haptic_feedback_enabled"
+            android:title="@string/miraclo_sounds_vibrate_touch"
+            android:summary="@string/miraclo_sounds_vibrate_touch_sum" />
+    </PreferenceCategory>
+
+    <com.android.settingslib.widget.FooterPreference
+        android:key="miraclo_sounds_footer"
+        android:title="@string/miraclo_sounds_footer" />
+
+    <!-- MIRACLO: everything on this page back to how it ships -->
+    <com.android.settings.miraclo.MiraResetPreference
+        android:key="miraclo_reset_page"
+        android:order="10000" />
+</PreferenceScreen>

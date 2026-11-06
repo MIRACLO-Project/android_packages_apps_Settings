@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     SPDX-FileCopyrightText: MIRACLO
+     SPDX-License-Identifier: Apache-2.0
+-->
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:key="miraclo_studio_privacy"
+    android:title="@string/miraclo_card_privacy">
+
+    <com.android.settingslib.widget.TopIntroPreference
+        android:key="miraclo_studio_privacy_intro"
+        android:title="@string/miraclo_privacy_intro" />
+
+    <PreferenceCategory
+        android:key="miraclo_privacy_see"
+        android:title="@string/miraclo_privacy_see">
+        <Preference
+            android:key="miraclo_privacy_dashboard"
+            android:title="@string/miraclo_privacy_dashboard"
+            android:summary="@string/miraclo_privacy_dashboard_sum">
+            <intent android:action="android.intent.action.REVIEW_PERMISSION_USAGE" />
+        </Preference>
+        <com.android.settings.miraclo.MiraTableSwitchPreference
+            android:key="secure:clipboard_show_access_notifications"
+            android:title="@string/miraclo_privacy_clipboard"
+            android:summary="@string/miraclo_privacy_clipboard_sum" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:key="miraclo_privacy_lock"
+        android:title="@string/miraclo_privacy_lock">
+        <Preference
+            android:key="miraclo_privacy_lock_notifications"
+            android:title="@string/miraclo_privacy_lock_notifs"
+            android:summary="@string/miraclo_privacy_lock_notifs_sum">
+            <intent android:action="android.settings.NOTIFICATION_SETTINGS" />
+        </Preference>
+        <com.android.settings.miraclo.MiraTableSwitchPreference
+            android:key="system:show_password"
+            android:title="@string/miraclo_privacy_passwords"
+            android:summary="@string/miraclo_privacy_passwords_sum" />
+    </PreferenceCategory>
+</PreferenceScreen>

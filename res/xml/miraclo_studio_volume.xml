@@ -19,4 +19,18 @@
         android:title="@string/miraclo_volume_panel_title"
         android:summary="@string/miraclo_volume_panel_summary"
         android:defaultValue="false" />
+
+    <com.android.settings.miraclo.SecureSettingListPreference
+        android:key="miraclo_volume_side"
+        android:dependency="miraclo_volume_panel"
+        android:title="@string/miraclo_volume_side_title"
+        android:entries="@array/miraclo_volume_side_e"
+        android:entryValues="@array/miraclo_volume_side_v"
+        android:defaultValue="0"
+        android:summary="%s" />
+
+    <!-- MIRACLO: everything on this page back to how it ships -->
+    <com.android.settings.miraclo.MiraResetPreference
+        android:key="miraclo_reset_page"
+        android:order="10000" />
 </PreferenceScreen>
