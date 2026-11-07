@@ -6360,5 +6360,17 @@ SPDX-License-Identifier: BSD-3-Clause-Clear -->
 
         <!-- This is the longest AndroidManifest.xml ever. -->
 
+        <!-- MIRACLO: the launcher's Home settings > Advanced settings -->
+        <activity
+            android:name=".miraclo.studio.MiraStudioLinkActivity"
+            android:exported="true"
+            android:excludeFromRecents="true"
+            android:noHistory="true"
+            android:theme="@android:style/Theme.NoDisplay">
+            <intent-filter>
+                <action android:name="org.miraclo.studio.HOME_ICONS" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
     </application>
 </manifest>

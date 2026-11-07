@@ -586,12 +586,7 @@ class MiraStudioHomeIconsPreference @JvmOverloads constructor(
                     StudioNavRow("Home search", "Search pill or bar, and what it searches") {
                         ctx.openStudioPage(MiraStudioHomeSearchFragment::class.java.name, R.string.miraclo_studio_home_search_title)
                     }
-                    StudioNavRow("Icon pack", "Android's round icons, Mira icons or a pack you installed") {
-                        ctx.startActivity(Intent(Intent.ACTION_APPLICATION_PREFERENCES).setPackage("com.android.launcher3").addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
-                    }
-                    StudioNavRow("Recents style", "ColorOS stack or default, in Home settings") {
-                        ctx.startActivity(Intent(Intent.ACTION_APPLICATION_PREFERENCES).setPackage("com.android.launcher3").addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
-                    }
+                    MiraStudioPacksRows()
                 }
             }
         }

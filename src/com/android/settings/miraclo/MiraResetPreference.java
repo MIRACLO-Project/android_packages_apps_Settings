@@ -154,6 +154,7 @@ public class MiraResetPreference extends Preference {
             case "miraclo_studio_home":
                 // Round icons and no themed icons, through the launcher's own settings.
                 new com.android.settings.miraclo.studio.MiraStudioResetBridge(ctx).resetLauncher();
+                com.android.settings.miraclo.studio.MiraStudioPacks.INSTANCE.reset(ctx);
                 break;
             case "miraclo_studio_colors":
                 // Colours from the wallpaper again; the icon pack and font choices stay.

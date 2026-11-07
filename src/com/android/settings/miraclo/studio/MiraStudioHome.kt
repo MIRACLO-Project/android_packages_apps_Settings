@@ -908,8 +908,6 @@ internal object MiraStudioSearch {
                 "notification shade notifications pull down split dual shade cards"),
             e(s(R.string.miraclo_studio_volume_title), s(R.string.miraclo_studio_volume_summary), R.string.miraclo_studio_volume_title, volume,
                 "volume panel slider sound side left right ringer media"),
-            e(s(R.string.miraclo_power_title), s(R.string.miraclo_power_card_sum), R.string.miraclo_power_title, power,
-                "power menu power off shutdown restart reboot recovery bootloader fastboot emergency lockdown advanced"),
             e(s(R.string.miraclo_liquid_glass_title), s(R.string.miraclo_studio_glass_summary), R.string.miraclo_liquid_glass_title, glass,
                 "liquid glass blur transparency transparent refraction glow translucent"),
             e(s(R.string.miraclo_style_motion), s(R.string.miraclo_style_motion_sum), R.string.miraclo_style_motion, motion,
