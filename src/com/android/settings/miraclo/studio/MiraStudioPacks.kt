@@ -59,6 +59,8 @@ internal object MiraStudioPacks {
         Settings.Secure.putString(cr, KEY_HOME, "")
         Settings.Secure.putString(cr, KEY_DRAWER, "")
         Settings.Secure.putString(cr, KEY_RECENTS, "default")
+        Settings.Secure.putInt(cr, "miraclo_recents_hide_screenshot", 0)
+        Settings.Secure.putInt(cr, "miraclo_recents_hide_clear", 0)
     }
 }
 
@@ -103,5 +105,15 @@ internal fun MiraStudioPacksRows() {
     ) {
         recents = it
         Settings.Secure.putString(cr, MiraStudioPacks.KEY_RECENTS, it)
+    }
+    var hideShot by remember { mutableStateOf(Settings.Secure.getInt(cr, "miraclo_recents_hide_screenshot", 0) != 0) }
+    StudioSwitchRow("Hide Screenshot in recents", null, hideShot) {
+        hideShot = it
+        Settings.Secure.putInt(cr, "miraclo_recents_hide_screenshot", if (it) 1 else 0)
+    }
+    var hideClear by remember { mutableStateOf(Settings.Secure.getInt(cr, "miraclo_recents_hide_clear", 0) != 0) }
+    StudioSwitchRow("Hide Clear all in recents", null, hideClear) {
+        hideClear = it
+        Settings.Secure.putInt(cr, "miraclo_recents_hide_clear", if (it) 1 else 0)
     }
 }
